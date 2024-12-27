@@ -15,14 +15,14 @@ function setup() {
 }
 
 function draw() {
+  background("#b8b4b4");
   drawPlayer();
-  drawGun();
   drawBullets();
+  drawGun();
   movePlayer();
 }
 
 function drawPlayer() {
-  background("#b8b4b4");
   strokeWeight(3.5);
   fill(255, 255, 255);
   ellipse(player.x, player.y, 40);
@@ -35,7 +35,7 @@ function drawGun() {
 
   fill("#343434");
   strokeWeight(2);
-  rect(21.7, - 5, 25.5, 10);
+  rect(21.7, - 5, 24, 10);
   pop();
 }
 
@@ -56,12 +56,17 @@ function movePlayer() {
 
 function drawBullets() {
   for (let i = bullets.length-1; i >=0; i--) {
-    bullet = bullets[i];
+    let bullet = bullets[i];
     bullet.x += bullet.xDirection;
     bullet.y += bullet.yDirection;
-    strokeWeight(0);
+
+    push();
+    translate(bullet.x, bullet.y);
+    rotate(bullet.direction);
     fill("yellow");
-    rect(bullet.x, bullet.y, 10.5, 5.5);
+    strokeWeight(0);
+    rect(0, -2.75, 10.5, 5.5);
+    pop();
   }
 }
 
@@ -70,8 +75,9 @@ function mousePressed() {
   let bullet = {
     x: player.x + cos(angle) * 25,
     y: player.y + sin(angle) * 25,
-    vx: cos(angle) * 10,
-    vy: sin(angle) * 10
+    xDirection: cos(angle) * 10,
+    yDirection: sin(angle) * 10,
+    direction: angle
   };
   bullets.push(bullet);
 }
