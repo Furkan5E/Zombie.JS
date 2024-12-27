@@ -2,13 +2,14 @@ let player = {
   x: 400,
   y: 300,
   speed: 5,
-  health: 100
-};
+  health: 3
+}
 
 let score = 0;
 let gameOver = false;
 
 let bullets = [];
+let zombies = [];
 
 function setup() {
   createCanvas(900, 600);
@@ -20,6 +21,7 @@ function draw() {
   drawBullets();
   drawGun();
   movePlayer();
+  //console.log(player.x);
 }
 
 function drawPlayer() {
@@ -40,16 +42,16 @@ function drawGun() {
 }
 
 function movePlayer() {
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+  if (keyIsDown(65)) {  // A key, left
     player.x -= player.speed;
   }
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+  if (keyIsDown(68)) { // D key, right
     player.x += player.speed;
   }
-  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+  if (keyIsDown(87) && player.y > 24) { // W key 
     player.y -= player.speed;
   }
-  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+  if (keyIsDown(83) && player.y < 576) {
     player.y += player.speed;
   }
 }

@@ -3,9 +3,3 @@ body {
     padding: 0;
     overflow: hidden;
 }
-
-canvas {
-    display: block;
-    border: none;
-    outline: none;
-}
