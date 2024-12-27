@@ -57,8 +57,8 @@ function movePlayer() {
 function drawBullets() {
   for (let i = bullets.length-1; i >=0; i--) {
     bullet = bullets[i];
-    bullet.x += bullet.xMovement;
-    bullet.y += bullet.yMovement;
+    bullet.x += bullet.xDirection;
+    bullet.y += bullet.yDirection;
     strokeWeight(0);
     fill("yellow");
     rect(bullet.x, bullet.y, 10.5, 5.5);
@@ -70,8 +70,8 @@ function mousePressed() {
   let bullet = {
     x: player.x + cos(angle) * 25,
     y: player.y + sin(angle) * 25,
-    xMovement: cos(angle) * 10,
-    yMovement: sin(angle) * 10
+    vx: cos(angle) * 10,
+    vy: sin(angle) * 10
   };
   bullets.push(bullet);
 }
