@@ -2,14 +2,18 @@ let player = {
   x: 400,
   y: 300,
   speed: 5,
-  health: 3
+  hearts: 3
 }
 
-let score = 0;
 let gameOver = false;
 
 let bullets = [];
 let zombies = [];
+
+let heartImg;
+function preload() {
+  heartImg = loadImage("/Assets/heart.png");
+}
 
 function setup() {
   createCanvas(900, 600);
@@ -21,7 +25,7 @@ function draw() {
   drawBullets();
   drawGun();
   movePlayer();
-  //console.log(player.x);
+  drawUI();
 }
 
 function drawPlayer() {
@@ -42,16 +46,16 @@ function drawGun() {
 }
 
 function movePlayer() {
-  if (keyIsDown(65)) {  // A key, left
+  if (keyIsDown(65) && player.x > 24) {  // A key, left
     player.x -= player.speed;
   }
-  if (keyIsDown(68)) { // D key, right
+  if (keyIsDown(68) && player.x < 876) { // D key, right
     player.x += player.speed;
   }
   if (keyIsDown(87) && player.y > 24) { // W key 
     player.y -= player.speed;
   }
-  if (keyIsDown(83) && player.y < 576) {
+  if (keyIsDown(83) && player.y < 576) { // S key
     player.y += player.speed;
   }
 }
@@ -67,8 +71,15 @@ function drawBullets() {
     rotate(bullet.direction);
     fill("yellow");
     strokeWeight(0);
-    rect(0, -2.75, 10.5, 5.5);
+    rect(0, -2.75, 14, 5.5);
     pop();
+  }
+}
+
+function drawUI() {
+  for (let i = 0; i < player.hearts; i++) {
+    image(heartImg, i * 35, 1, 34, 34);
+    noSmooth();
   }
 }
 
@@ -80,6 +91,6 @@ function mousePressed() {
     xDirection: cos(angle) * 10,
     yDirection: sin(angle) * 10,
     direction: angle
-  };
+  }
   bullets.push(bullet);
 }
