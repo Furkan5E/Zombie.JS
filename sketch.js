@@ -15,9 +15,9 @@ let playerImg;
 let zombieImg;
 
 function preload() {
-  heartImg = loadImage("/Assets/heart.png");
-  playerImg = loadImage("/Assets/player.png");
-  zombieImg = loadImage("/Assets/zombie.png");
+  heartImg = loadImage("/assets/heart.png");
+  playerImg = loadImage("/assets/player.png");
+  zombieImg = loadImage("/assets/zombie.png");
 }
 
 function setup() {
