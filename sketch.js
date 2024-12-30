@@ -1,6 +1,6 @@
 let player = {
-  x: 400,
-  y: 300,
+  x: 250,
+  y: 325,
   speed: 5,
   health: 3
 }
@@ -19,9 +19,11 @@ let fastZombieImg;
 let strongZombieImg;
 
 let wavesArray;
+let font;
 
 function preload() {
   wavesArray = loadJSON("waves.json");
+  font = loadFont('/assets/font.otf');
 
   heartImg = loadImage("assets/heart.png");
   playerImg = loadImage("assets/player.png");
@@ -37,8 +39,10 @@ function setup() {
 }
 
 function draw() {
-  if (gameOver)
+  if (gameOver) {
+    drawUI();
     return;
+  }
   background("#b8b4b4");
   drawBullets();
   drawPlayer();
@@ -166,9 +170,35 @@ function getZombie(imgGiven, healthGiven, sizeGiven, speedGiven) {
 }
 
 function drawUI() {
+  if (gameOver) {
+    background("#000000");
+    textFont(font);
+    textSize(100);
+    fill(255,255,255);
+    textAlign(CENTER);
+    textSize(100);
+    text("GAME OVER", 450, 200);
+    textSize(50);
+    text("Press R to to play game again", 450, 250);
+    resetGame();
+  }
   for (let i = 0; i < player.health; i++) {
     image(heartImg, i * 35, 1, 34, 34);
     noSmooth();
+  }
+}
+
+function resetGame() {
+  if (keyIsDown(82)) { // R key
+    bulletsArray = [];
+    zombiesArray = [];
+    waveNumber = 0;
+    zombieNumber = 0;
+    player.health = 3;
+    player.x = 250;
+    player.y = 325;
+
+    gameOver = false;
   }
 }
 
