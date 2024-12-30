@@ -23,7 +23,7 @@ let font;
 
 function preload() {
   wavesArray = loadJSON("waves.json");
-  font = loadFont('/assets/font.otf');
+  font = loadFont('assets/font.otf');
 
   heartImg = loadImage("assets/heart.png");
   playerImg = loadImage("assets/player.png");
