@@ -2,27 +2,38 @@ let player = {
   x: 400,
   y: 300,
   speed: 5,
-  hearts: 3
+  health: 3
 }
 
 let gameOver = false;
+let waveNumber = 0;
+let zombieType = 0;
 
-let bullets = [];
-let zombies = [];
+let bulletsArray = [];
+let zombiesArray = [];
 
 let heartImg;
 let playerImg;
 let zombieImg;
+let fastZombieImg;
+let strongZombieImg;
+
+let wavesArray;
 
 function preload() {
+  wavesArray = loadJSON("waves.json");
+
   heartImg = loadImage("assets/heart.png");
   playerImg = loadImage("assets/player.png");
   zombieImg = loadImage("assets/zombie.png");
+  fastZombieImg = loadImage("assets/fastZombie.png");
+  strongZombieImg = loadImage("assets/strongZombie.png");
 }
 
 function setup() {
   createCanvas(900, 600);
-  setInterval(spawnZombies, 1500);
+  setInterval(spawnZombies, 500);
+  wavesArray = wavesArray.waves;
 }
 
 function draw() {
@@ -60,10 +71,10 @@ function movePlayer() {
 }
 
 function drawBullets() {
-  for (let i = bullets.length-1; i>=0; i--) {
-    let bullet = bullets[i];
-    bullet.x += bullet.xVelocity;
-    bullet.y += bullet.yVelocity;
+  for (let i = bulletsArray.length-1; i>=0; i--) {
+    let bullet = bulletsArray[i];
+    bullet.x += bullet.dx;
+    bullet.y += bullet.dy;
 
     push();
     translate(bullet.x, bullet.y);
@@ -76,15 +87,14 @@ function drawBullets() {
 }
 
 function drawZombies() {
-  for (let i = zombies.length - 1; i >= 0; i--) {
-    let zombie = zombies[i];
-      let speed = 2;
+  for (let i = zombiesArray.length - 1; i >= 0; i--) {
+    let zombie = zombiesArray[i];
       
-      let dx = (player.x - zombie.x) / Math.sqrt(( player.x - zombie.x)**2 + (player.y - zombie.y)**2);
-      let dy = (player.y - zombie.y) / Math.sqrt(( player.x - zombie.x)**2 + (player.y - zombie.y)**2);
+      let dx = (player.x - zombie.x) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
+      let dy = (player.y - zombie.y) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
 
-      zombie.x += dx * speed;
-      zombie.y += dy * speed;
+      zombie.x += dx * zombie.speed;
+      zombie.y += dy * zombie.speed;
 
     let angle = Math.atan2(dy, dx);
     push();
@@ -92,21 +102,47 @@ function drawZombies() {
     rotate(angle);
     noSmooth();
     imageMode(CENTER);
-    image(zombieImg, 0, 0, 154/2.7, 120/2.7);
+    image(zombie.img, 0, 0, zombie.size[0], zombie.size[1]);
     pop();
   }
-  }
+}
 
 function spawnZombies() {
+  if (waveNumber < wavesArray.length) {
+    let currentZombies = wavesArray[waveNumber];
+    if (zombieType < currentZombies.length) {
+      if (zombieType === 1) { // normal
+        getZombie(zombieImg, 3, [57, 44], 2) // image, health, size, speed
+      }
+      else if (zombieType === 2) { // fast
+        getZombie(fastZombieImg, 2, [51, 40], 3)
+      }
+      else if (zombieType === 3) { // strong
+        getZombie(strongZombieImg, 5, [61, 48], 1.5)
+      }
+      zombieType += 1;
+    }
+    else {
+      waveNumber +=1;
+      zombieType = 0;
+    }
+  }
+}
+
+function getZombie(imgGiven, healthGiven, sizeGiven, speedGiven) {
   let zombie = {
     x: 920,
-    y: Math.random() * 610
+    y: Math.random() * 610,
+    img: imgGiven,
+    health: healthGiven,
+    size: sizeGiven,  // image size is 154 by 120 px
+    speed: speedGiven
   }
-  zombies.push(zombie);
+  zombiesArray.push(zombie);
 }
 
 function drawUI() {
-  for (let i = 0; i < player.hearts; i++) {
+  for (let i = 0; i < player.health; i++) {
     image(heartImg, i * 35, 1, 34, 34);
     noSmooth();
   }
@@ -117,9 +153,9 @@ function mousePressed() {
   let bullet = {
     x: player.x + cos(angle) * 25,
     y: player.y + sin(angle) * 25,
-    xVelocity: cos(angle) * 10,
-    yVelocity: sin(angle) * 10,
+    dx: cos(angle) * 10,
+    dy: sin(angle) * 10,
     angle: angle
   }
-  bullets.push(bullet);
+  bulletsArray.push(bullet);
 }
