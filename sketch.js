@@ -7,7 +7,7 @@ let player = {
 
 let gameOver = false;
 let waveNumber = 0;
-let zombieType = 0;
+let zombieNumber = 0;
 
 let bulletsArray = [];
 let zombiesArray = [];
@@ -37,6 +37,8 @@ function setup() {
 }
 
 function draw() {
+  if (gameOver)
+    return;
   background("#b8b4b4");
   drawBullets();
   drawPlayer();
@@ -89,12 +91,11 @@ function drawBullets() {
 function drawZombies() {
   for (let i = zombiesArray.length - 1; i >= 0; i--) {
     let zombie = zombiesArray[i];
-      
-      let dx = (player.x - zombie.x) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
-      let dy = (player.y - zombie.y) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
+    let dx = (player.x - zombie.x) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
+    let dy = (player.y - zombie.y) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
 
-      zombie.x += dx * zombie.speed;
-      zombie.y += dy * zombie.speed;
+    zombie.x += dx * zombie.speed;
+    zombie.y += dy * zombie.speed;
 
     let angle = Math.atan2(dy, dx);
     push();
@@ -104,27 +105,49 @@ function drawZombies() {
     imageMode(CENTER);
     image(zombie.img, 0, 0, zombie.size[0], zombie.size[1]);
     pop();
+
+    if (dist(player.x, player.y, zombie.x, zombie.y) < zombie.size[0] / 1.5) {
+      if (zombie.coolDown <= 0) {
+        zombie.coolDown = 60;
+        player.health -= 1;
+        if (player.health <= 0) {
+          gameOver = true;
+        }
+      }
+    }
+    if (zombie.coolDown > 0) {
+      zombie.coolDown -= 1;
+    }
+    for (let x = bulletsArray.length - 1; x >= 0; x--) {
+      let bullet = bulletsArray[x];
+      if (dist(bullet.x, bullet.y, zombie.x, zombie.y) < zombie.size[0] / 2) {
+        zombie.health -= 1;
+        if (zombie.health <= 0) zombiesArray.splice(i, 1);
+        bulletsArray.splice(x, 1);
+      }
+    }
   }
 }
 
 function spawnZombies() {
   if (waveNumber < wavesArray.length) {
-    let currentZombies = wavesArray[waveNumber];
-    if (zombieType < currentZombies.length) {
+    let currentWave = wavesArray[waveNumber];
+    if (zombieNumber < currentWave.length) {
+      let zombieType = currentWave[zombieNumber];
       if (zombieType === 1) { // normal
-        getZombie(zombieImg, 3, [57, 44], 2) // image, health, size, speed
-      }
+        getZombie(zombieImg, 3, [57, 44], 2); // image, health, size, speed
+      } 
       else if (zombieType === 2) { // fast
-        getZombie(fastZombieImg, 2, [51, 40], 3)
-      }
+        getZombie(fastZombieImg, 2, [51, 40], 3);
+      } 
       else if (zombieType === 3) { // strong
-        getZombie(strongZombieImg, 5, [61, 48], 1.5)
+        getZombie(strongZombieImg, 5, [61, 48], 1.5);
       }
-      zombieType += 1;
-    }
+      zombieNumber += 1;
+    } 
     else {
-      waveNumber +=1;
-      zombieType = 0;
+      waveNumber += 1;
+      zombieNumber = 0;
     }
   }
 }
@@ -136,7 +159,8 @@ function getZombie(imgGiven, healthGiven, sizeGiven, speedGiven) {
     img: imgGiven,
     health: healthGiven,
     size: sizeGiven,  // image size is 154 by 120 px
-    speed: speedGiven
+    speed: speedGiven,
+    coolDown: 0
   }
   zombiesArray.push(zombie);
 }
