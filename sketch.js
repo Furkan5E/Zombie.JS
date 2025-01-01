@@ -1,22 +1,20 @@
-let player = {
-  x: 250,
-  y: 325,
-  speed: 5,
-  health: 3
-}
-
 let gameOver = false;
 let waveNumber = 0;
 let zombieNumber = 0;
 
 let bulletsArray = [];
 let zombiesArray = [];
+let player = new Player();
 
 let heartImg;
 let playerImg;
+let playerHurtImg;
 let zombieImg;
+let zombieHurtImg;
 let fastZombieImg;
 let strongZombieImg;
+let bossZombieImg;
+let minionZombieImg;
 
 let wavesArray;
 let font;
@@ -27,14 +25,18 @@ function preload() {
 
   heartImg = loadImage("assets/heart.png");
   playerImg = loadImage("assets/player.png");
+  playerHurtImg = loadImage("assets/playerHurt.png");
   zombieImg = loadImage("assets/zombie.png");
+  zombieHurtImg = loadImage("assets/zombieHurt.png");
   fastZombieImg = loadImage("assets/fastZombie.png");
   strongZombieImg = loadImage("assets/strongZombie.png");
+  bossZombieImg = loadImage("assets/bossZombie.png");
+  minionZombieImg = loadImage("assets/minionZombie.png");
 }
 
 function setup() {
   createCanvas(900, 600);
-  setInterval(spawnZombies, 500);
+  setInterval(spawnZombies, 900);
   wavesArray = wavesArray.waves;
 }
 
@@ -45,35 +47,11 @@ function draw() {
   }
   background("#b8b4b4");
   drawBullets();
-  drawPlayer();
-  movePlayer();
+  player.draw();
+  player.update();
+  player.move();
   drawUI();
   drawZombies();
-}
-
-function drawPlayer() {
-  push();
-  translate(player.x, player.y);
-  rotate(atan2(mouseY - player.y, mouseX - player.x));
-  noSmooth();
-  imageMode(CENTER);
-  image(playerImg, 0, 0, 305/3.2, 305/3.2);
-  pop();
-}
-
-function movePlayer() {
-  if (keyIsDown(65) && player.x > 24) {  // A key, left
-    player.x -= player.speed;
-  }
-  if (keyIsDown(68) && player.x < 876) { // D key, right
-    player.x += player.speed;
-  }
-  if (keyIsDown(87) && player.y > 24) { // W key, up
-    player.y -= player.speed;
-  }
-  if (keyIsDown(83) && player.y < 576) { // S key, down
-    player.y += player.speed;
-  }
 }
 
 function drawBullets() {
@@ -95,40 +73,12 @@ function drawBullets() {
 function drawZombies() {
   for (let i = zombiesArray.length - 1; i >= 0; i--) {
     let zombie = zombiesArray[i];
-    let dx = (player.x - zombie.x) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
-    let dy = (player.y - zombie.y) / Math.sqrt((player.x - zombie.x)**2 + (player.y - zombie.y)**2);
-
-    zombie.x += dx * zombie.speed;
-    zombie.y += dy * zombie.speed;
-
-    let angle = Math.atan2(dy, dx);
-    push();
-    translate(zombie.x, zombie.y);
-    rotate(angle);
-    noSmooth();
-    imageMode(CENTER);
-    image(zombie.img, 0, 0, zombie.size[0], zombie.size[1]);
-    pop();
-
-    if (dist(player.x, player.y, zombie.x, zombie.y) < zombie.size[0] / 1.5) {
-      if (zombie.coolDown <= 0) {
-        zombie.coolDown = 60;
-        player.health -= 1;
-        if (player.health <= 0) {
-          gameOver = true;
-        }
-      }
-    }
-    if (zombie.coolDown > 0) {
-      zombie.coolDown -= 1;
-    }
-    for (let x = bulletsArray.length - 1; x >= 0; x--) {
-      let bullet = bulletsArray[x];
-      if (dist(bullet.x, bullet.y, zombie.x, zombie.y) < zombie.size[0] / 2) {
-        zombie.health -= 1;
-        if (zombie.health <= 0) zombiesArray.splice(i, 1);
-        bulletsArray.splice(x, 1);
-      }
+    zombie.move();
+    zombie.draw();
+    zombie.update();
+    zombie.collisionCheck();
+    if (zombie.health <= 0) {
+      zombiesArray.splice(i, 1)
     }
   }
 }
@@ -139,13 +89,20 @@ function spawnZombies() {
     if (zombieNumber < currentWave.length) {
       let zombieType = currentWave[zombieNumber];
       if (zombieType === 1) { // normal
-        getZombie(zombieImg, 3, [57, 44], 2); // image, health, size, speed
+        let zombie = new Zombie();
+        zombiesArray.push(zombie);
       } 
       else if (zombieType === 2) { // fast
-        getZombie(fastZombieImg, 2, [51, 40], 3);
+        let zombie = new FastZombie();
+        zombiesArray.push(zombie);
       } 
       else if (zombieType === 3) { // strong
-        getZombie(strongZombieImg, 5, [61, 48], 1.5);
+        let zombie = new StrongZombie();
+        zombiesArray.push(zombie);
+      }
+      else if (zombieType === 0) { // boss
+        let zombie = new BossZombie();
+        zombiesArray.push(zombie);
       }
       zombieNumber += 1;
     } 
@@ -154,19 +111,6 @@ function spawnZombies() {
       zombieNumber = 0;
     }
   }
-}
-
-function getZombie(imgGiven, healthGiven, sizeGiven, speedGiven) {
-  let zombie = {
-    x: 920,
-    y: Math.random() * 610,
-    img: imgGiven,
-    health: healthGiven,
-    size: sizeGiven,  // image size is 154 by 120 px
-    speed: speedGiven,
-    coolDown: 0
-  }
-  zombiesArray.push(zombie);
 }
 
 function drawUI() {
@@ -185,6 +129,12 @@ function drawUI() {
   for (let i = 0; i < player.health; i++) {
     image(heartImg, i * 35, 1, 34, 34);
     noSmooth();
+    textFont(font);
+    textSize(100);
+    fill(0,0,0);
+    textSize(30);
+    textAlign(LEFT);
+    text("Wave " + (waveNumber + 1), 2, 60);
   }
 }
 
@@ -203,13 +153,16 @@ function resetGame() {
 }
 
 function mousePressed() {
-  let angle = atan2(mouseY - player.y, mouseX - player.x);
-  let bullet = {
-    x: player.x + cos(angle) * 25,
-    y: player.y + sin(angle) * 25,
-    dx: cos(angle) * 10,
-    dy: sin(angle) * 10,
-    angle: angle
+  if (player.attackCooldown <= 0) {
+    player.attackCooldown = 3;
+    let angle = atan2(mouseY - player.y, mouseX - player.x);
+    let bullet = {
+      x: player.x + cos(angle) * 25,
+      y: player.y + sin(angle) * 25,
+      dx: cos(angle) * 10,
+      dy: sin(angle) * 10,
+      angle: angle
+    }
+    bulletsArray.push(bullet);
   }
-  bulletsArray.push(bullet);
 }
