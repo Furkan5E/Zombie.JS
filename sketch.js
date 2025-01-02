@@ -1,6 +1,7 @@
 let isGameOver = false;
 let waveNumber = 0;
 let zombieNumber = 0;
+let spawnCooldown = 0;
 
 let bulletsArray = [];
 let zombiesArray = [];
@@ -38,12 +39,11 @@ function preload() {
 
 function setup() {
   createCanvas(900, 600);
-  setInterval(spawnZombies, 900);
   wavesArray = wavesArray.waves;
 }
 
 function draw() {
-  if (isGameOver) {
+  if (isGameOver || onMainMenu) {
     drawUI();
     return;
   }
@@ -54,6 +54,14 @@ function draw() {
   player.move();
   drawUI();
   drawZombies();
+
+  if (spawnCooldown > 0){
+    spawnCooldown -= 1;
+  }
+  else if (spawnCooldown <= 0) {
+    spawnCooldown = 45;
+    spawnZombies();
+  }
 }
 
 function drawBullets() {
@@ -82,7 +90,7 @@ function drawZombies() {
     if (zombie.health <= 0) {
       if (zombie instanceof SplitZombie)
         zombie.split();
-      zombiesArray.splice(i, 1)
+      zombiesArray.splice(i, 1);
     }
   }
 }
@@ -119,11 +127,14 @@ function spawnZombies() {
       zombieNumber = 0;
     }
   }
+  else if (waveNumber == wavesArray.length && zombiesArray.length === 0) {
+    isGamewon = true;
+  }
 }
 
 function drawUI() {
   if (isGameOver) {
-    background("#000000");
+    background("black");
     textFont(font);
     textSize(100);
     fill(255,255,255);
@@ -132,7 +143,8 @@ function drawUI() {
     text("GAME OVER", 450, 200);
     textSize(50);
     text("Press R to to play game again", 450, 250);
-    resetGame();
+    if (keyIsDown(82)) // R key
+      resetGame();
   }
   for (let i = 0; i < player.health; i++) {
     image(heartImg, i * 35, 1, 34, 34);
@@ -147,17 +159,14 @@ function drawUI() {
 }
 
 function resetGame() {
-  if (keyIsDown(82)) { // R key
-    bulletsArray = [];
-    zombiesArray = [];
-    waveNumber = 0;
-    zombieNumber = 0;
-    player.health = 3;
-    player.x = 250;
-    player.y = 325;
-
-    isGameOver = false;
-  }
+  bulletsArray = [];
+  zombiesArray = [];
+  waveNumber = 0;
+  zombieNumber = 0;
+  player.health = 3;
+  player.x = 250;
+  player.y = 325;
+  isGameOver = false;
 }
 
 function mousePressed() {
