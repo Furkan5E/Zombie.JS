@@ -111,6 +111,7 @@ class Zombie {
               player.health -= 1;
               player.hurt = true;
               player.hurtCooldown = 3;
+              playerHurtSound.play();
               if (player.health <= 0) {
                 isGameOver = true;
               }
@@ -123,6 +124,7 @@ class Zombie {
               this.health -= 1;
               this.hurt = true;
               this.hurtCooldown = 2;
+              zombieHurtSound.play();
               bulletsArray.splice(i, 1);
             }
         }
@@ -174,20 +176,19 @@ class BossZombie extends Zombie {
     }
 
     spawnMinions() {
-        if (this.spawnCooldown <= 0) {
-            this.spawnCooldown = 50;
-            let minion = new MinionZombie(this.x + Math.random(), this.y + Math.random());
-            zombiesArray.push(minion);
-        }
+        let minion = new MinionZombie(this.x + Math.random(), this.y + Math.random());
+        zombiesArray.push(minion);
     }
 
     update() {
         super.update();
 
-        this.spawnMinions();
-
         if (this.spawnCooldown > 0) {
             this.spawnCooldown -= 1;
+        }
+        else if (this.spawnCooldown <= 0) {
+            this.spawnCooldown = 50;
+            this.spawnMinions();
         }
     }
 }
@@ -218,6 +219,7 @@ class SplitZombie extends Zombie {
             splitZombie2.x = this.x;
             splitZombie2.y = this.y - 22;
             zombiesArray.push(splitZombie2);
+            splitSound.play();
         }
     }
 }

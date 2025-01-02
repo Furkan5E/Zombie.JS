@@ -21,6 +21,12 @@ let splitZombieImg;
 let wavesArray;
 let font;
 
+let playerHurtSound;
+let shootSound;
+let zombieHurtSound;
+let splitSound;
+let backgroundMusic;
+
 function preload() {
   wavesArray = loadJSON("waves.json");
   font = loadFont('assets/font.otf');
@@ -35,11 +41,18 @@ function preload() {
   bossZombieImg = loadImage("assets/bossZombie.png");
   minionZombieImg = loadImage("assets/minionZombie.png");
   splitZombieImg = loadImage("assets/splitZombie.png");
+
+  playerHurtSound = loadSound("sounds/playerHurt.wav");
+  shootSound = loadSound("sounds/shoot.wav");
+  zombieHurtSound = loadSound("sounds/zombieHurt.wav");
+  splitSound = loadSound("sounds/split.wav");
+  backgroundMusic = loadSound("sounds/battleship.ogg")
 }
 
 function setup() {
   createCanvas(900, 600);
   wavesArray = wavesArray.waves;
+  backgroundMusic.loop();
 }
 
 function draw() {
@@ -181,5 +194,6 @@ function mousePressed() {
       angle: angle
     };
     bulletsArray.push(bullet);
+    shootSound.play();
   }
 }
