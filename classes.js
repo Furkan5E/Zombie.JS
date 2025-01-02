@@ -112,7 +112,7 @@ class Zombie {
               player.hurt = true;
               player.hurtCooldown = 3;
               if (player.health <= 0) {
-                gameOver = true;
+                isGameOver = true;
               }
             }
           }
