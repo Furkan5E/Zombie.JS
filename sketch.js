@@ -15,6 +15,7 @@ let fastZombieImg;
 let strongZombieImg;
 let bossZombieImg;
 let minionZombieImg;
+let splitZombieImg;
 
 let wavesArray;
 let font;
@@ -32,6 +33,7 @@ function preload() {
   strongZombieImg = loadImage("assets/strongZombie.png");
   bossZombieImg = loadImage("assets/bossZombie.png");
   minionZombieImg = loadImage("assets/minionZombie.png");
+  splitZombieImg = loadImage("assets/splitZombie.png");
 }
 
 function setup() {
@@ -78,6 +80,8 @@ function drawZombies() {
     zombie.update();
     zombie.collisionCheck();
     if (zombie.health <= 0) {
+      if (zombie instanceof SplitZombie)
+        zombie.split();
       zombiesArray.splice(i, 1)
     }
   }
@@ -98,6 +102,10 @@ function spawnZombies() {
       } 
       else if (zombieType === 3) { // strong
         let zombie = new StrongZombie();
+        zombiesArray.push(zombie);
+      }
+      else if (zombieType === 4) { // Split
+        let zombie = new SplitZombie(false);
         zombiesArray.push(zombie);
       }
       else if (zombieType === 0) { // boss
@@ -154,7 +162,7 @@ function resetGame() {
 
 function mousePressed() {
   if (player.attackCooldown <= 0) {
-    player.attackCooldown = 3;
+    player.attackCooldown = 6;
     let angle = atan2(mouseY - player.y, mouseX - player.x);
     let bullet = {
       x: player.x + cos(angle) * 25,

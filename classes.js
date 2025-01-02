@@ -191,3 +191,33 @@ class BossZombie extends Zombie {
         }
     }
 }
+
+class SplitZombie extends Zombie {
+    constructor(hasSplit) {
+        super();
+        this.img = splitZombieImg;
+        this.hasSplit = hasSplit;
+        if (!this.hasSplit) {
+            this.size = [61, 48];
+            this.health = 5
+            this.speed = 1;
+        }
+        else{
+            this.size = [51, 40];
+            this.health = 3
+            this.speed = 2.5;
+        }
+    }
+    split() {
+        if (!this.hasSplit){
+            let splitZombie1 = new SplitZombie(true)
+            splitZombie1.x = this.x;
+            splitZombie1.y = this.y + 22;
+            zombiesArray.push(splitZombie1);
+            let splitZombie2 = new SplitZombie(true)
+            splitZombie2.x = this.x;
+            splitZombie2.y = this.y - 22;
+            zombiesArray.push(splitZombie2);
+        }
+    }
+}
