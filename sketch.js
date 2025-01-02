@@ -43,7 +43,7 @@ function setup() {
 }
 
 function draw() {
-  if (isGameOver || onMainMenu) {
+  if (isGameOver) {
     drawUI();
     return;
   }
@@ -179,7 +179,7 @@ function mousePressed() {
       dx: cos(angle) * 10,
       dy: sin(angle) * 10,
       angle: angle
-    }
+    };
     bulletsArray.push(bullet);
   }
 }
