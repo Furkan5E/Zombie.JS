@@ -1,4 +1,4 @@
-let gameOver = false;
+let isGameOver = false;
 let waveNumber = 0;
 let zombieNumber = 0;
 
@@ -43,7 +43,7 @@ function setup() {
 }
 
 function draw() {
-  if (gameOver) {
+  if (isGameOver) {
     drawUI();
     return;
   }
@@ -104,7 +104,7 @@ function spawnZombies() {
         let zombie = new StrongZombie();
         zombiesArray.push(zombie);
       }
-      else if (zombieType === 4) { // Split
+      else if (zombieType === 4) { // split
         let zombie = new SplitZombie(false);
         zombiesArray.push(zombie);
       }
@@ -122,7 +122,7 @@ function spawnZombies() {
 }
 
 function drawUI() {
-  if (gameOver) {
+  if (isGameOver) {
     background("#000000");
     textFont(font);
     textSize(100);
@@ -156,7 +156,7 @@ function resetGame() {
     player.x = 250;
     player.y = 325;
 
-    gameOver = false;
+    isGameOver = false;
   }
 }
 
