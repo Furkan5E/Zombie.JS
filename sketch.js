@@ -72,7 +72,7 @@ function draw() {
     spawnCooldown -= 1;
   }
   else if (spawnCooldown <= 0) {
-    spawnCooldown = 45;
+    spawnCooldown = 50;
     spawnZombies();
   }
 }
@@ -140,9 +140,6 @@ function spawnZombies() {
       zombieNumber = 0;
     }
   }
-  else if (waveNumber == wavesArray.length && zombiesArray.length === 0) {
-    isGamewon = true;
-  }
 }
 
 function drawUI() {
@@ -183,7 +180,7 @@ function resetGame() {
 }
 
 function mousePressed() {
-  if (player.attackCooldown <= 0) {
+  if (player.attackCooldown <= 0 && !isGameOver) {
     player.attackCooldown = 6;
     let angle = atan2(mouseY - player.y, mouseX - player.x);
     let bullet = {
