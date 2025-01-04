@@ -1,4 +1,6 @@
 let isGameOver = false;
+let onMainMenu = true;
+let isGameWon = false;
 let waveNumber = 0;
 let zombieNumber = 0;
 let spawnCooldown = 0;
@@ -56,7 +58,7 @@ function setup() {
 }
 
 function draw() {
-  if (isGameOver) {
+  if (isGameOver || onMainMenu || isGameWon) {
     drawUI();
     return;
   }
@@ -91,6 +93,7 @@ function drawBullets() {
     rect(0, -1, 14, 4.5);
     pop();
   }
+  console.log(waveNumber);
 }
 
 function drawZombies() {
@@ -140,6 +143,9 @@ function spawnZombies() {
       zombieNumber = 0;
     }
   }
+  else if (waveNumber == wavesArray.length && zombiesArray.length === 0) {
+    isGamewon = true;
+  }
 }
 
 function drawUI() {
@@ -150,21 +156,53 @@ function drawUI() {
     fill(255,255,255);
     textAlign(CENTER);
     textSize(100);
-    text("GAME OVER", 450, 200);
+    text("GAME OVER :(", 450, 200);
     textSize(50);
-    text("Press R to to play game again", 450, 250);
+    text("Press R to to play again", 450, 265);
     if (keyIsDown(82)) // R key
       resetGame();
   }
-  for (let i = 0; i < player.health; i++) {
-    image(heartImg, i * 35, 1, 34, 34);
-    noSmooth();
+  else if (onMainMenu) {
+    background("black");
     textFont(font);
     textSize(100);
-    fill(0,0,0);
-    textSize(30);
-    textAlign(LEFT);
-    text("Wave " + (waveNumber + 1), 2, 60);
+    fill(255,255,255);
+    textAlign(CENTER);
+    textSize(80);
+    text("Zombie Showdown", 450, 200);
+    textSize(55);
+    text("Play", 450, 275);
+  }
+  else if (isGameWon) {
+    background("black");
+    textFont(font);
+    textSize(100);
+    fill(255,255,255);
+    textAlign(CENTER);
+    textSize(100);
+    text("YOU WON!", 450, 200);
+    textSize(50);
+    text("You defeated the zombie horde!", 450, 260);
+    text("Well done!", 450, 320);
+    textSize(45);
+    text("Press R to to play again", 450, 380);
+    if (keyIsDown(82)) // R key
+    {
+      resetGame();
+      isGameWon = false;
+    }
+  }
+  else {
+    for (let i = 0; i < player.health; i++) {
+      image(heartImg, i * 35, 1, 34, 34);
+      noSmooth();
+      textFont(font);
+      textSize(100);
+      fill(0,0,0);
+      textSize(30);
+      textAlign(LEFT);
+      text("Wave " + (waveNumber + 1), 2, 60);
+    }
   }
 }
 
@@ -180,7 +218,13 @@ function resetGame() {
 }
 
 function mousePressed() {
-  if (player.attackCooldown <= 0 && !isGameOver) {
+  if (onMainMenu) {
+    if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // Play button position
+      onMainMenu = false;
+      resetGame();
+    }
+  }
+  else if (player.attackCooldown <= 0) {
     player.attackCooldown = 6;
     let angle = atan2(mouseY - player.y, mouseX - player.x);
     let bullet = {
