@@ -10,28 +10,7 @@ let bulletsArray = [];
 let zombiesArray = [];
 let player = new Player();
 
-let heartImg;
-let playerImg;
-let playerHurtImg;
-let zombieImg;
-let zombieHurtImg;
-let fastZombieImg;
-let strongZombieImg;
-let bossZombieImg;
-let minionZombieImg;
-let splitZombieImg;
-
-let wavesArray;
-let font;
-
-let playerHurtSound;
-let shootSound;
-let zombieHurtSound;
-let splitSound;
-let backgroundMusic;
-
 function preload() {
-  wavesArray = loadJSON("waves.json");
   font = loadFont('assets/font.otf');
 
   heartImg = loadImage("assets/heart.png");
@@ -54,7 +33,6 @@ function preload() {
 
 function setup() {
   createCanvas(900, 600);
-  wavesArray = wavesArray.waves;
   backgroundMusic.loop();
 }
 
@@ -94,7 +72,6 @@ function drawBullets() {
     rect(0, -1, 14, 4.5);
     pop();
   }
-  console.log(waveNumber);
 }
 
 function drawZombies() {
