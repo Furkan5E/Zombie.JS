@@ -53,7 +53,7 @@ function draw() {
     spawnCooldown -= 1;
   }
   else if (spawnCooldown <= 0) {
-    spawnCooldown = 50;
+    spawnCooldown = 60;
     spawnZombies();
   }
 }
