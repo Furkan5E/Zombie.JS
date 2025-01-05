@@ -12,7 +12,7 @@ let zombiesArray = [];
 
 let player = new Player();
 
-function preload() {
+function preload() { // load assets
   font = loadFont('assets/font.otf');
 
   heartImg = loadImage("assets/heart.png");
@@ -124,6 +124,7 @@ function spawnZombies() {
         let zombie = new BossZombie();
         zombiesArray.push(zombie);
       }
+
       count += 1;
     } 
     else {
