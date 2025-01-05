@@ -3,7 +3,7 @@ let onMainMenu = true;
 let onControlsMenu = false;
 let isGameWon = false;
 let waveNumber = 0;
-let zombieNumber = 0;
+let count = 0;
 let spawnCooldown = 0;
 
 let bulletsArray = [];
@@ -28,6 +28,7 @@ function preload() {
   shootSound = loadSound("sounds/shoot.wav");
   zombieHurtSound = loadSound("sounds/zombieHurt.wav");
   splitSound = loadSound("sounds/split.wav");
+  selectSound = loadSound("sounds/select.wav");
   backgroundMusic = loadSound("sounds/battleship.ogg")
 }
 
@@ -92,8 +93,8 @@ function drawZombies() {
 function spawnZombies() {
   if (waveNumber < wavesArray.length) {
     let currentWave = wavesArray[waveNumber];
-    if (zombieNumber < currentWave.length) {
-      let zombieType = currentWave[zombieNumber];
+    if (count < currentWave.length) {
+      let zombieType = currentWave[count];
       if (zombieType === 1) { // normal
         let zombie = new Zombie();
         zombiesArray.push(zombie);
@@ -114,15 +115,16 @@ function spawnZombies() {
         let zombie = new BossZombie();
         zombiesArray.push(zombie);
       }
-      zombieNumber += 1;
+      count += 1;
     } 
     else {
       waveNumber += 1;
-      zombieNumber = 0;
+      count = 0;
     }
   }
-  else if (waveNumber == wavesArray.length && zombiesArray.length === 0) {
-    isGamewon = true;
+  // check if player won the game
+  else if (waveNumber >= wavesArray.length && zombiesArray.length === 0) {
+    isGameWon = true;
   }
 }
 
@@ -227,7 +229,7 @@ function resetGame() {
   bulletsArray = [];
   zombiesArray = [];
   waveNumber = 0;
-  zombieNumber = 0;
+  count = 0;
   player.health = 3;
   player.x = 250;
   player.y = 325;
@@ -239,11 +241,13 @@ function mousePressed() {
   if (onMainMenu) {
     if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // play button position
       onMainMenu = false;
+      selectSound.play();
       resetGame();
     }
     else if (mouseX <= 548 && mouseX >= 343 && mouseY <= 347 && mouseY >= 308) { // controls button position
       onMainMenu = false;
       onControlsMenu = true;
+      selectSound.play();
     }
   }
   // game Won screen
@@ -251,6 +255,7 @@ function mousePressed() {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
       onMainMenu = true;
       isGameWon = false;
+      selectSound.play();
     }
   }
   // game over screen
@@ -258,6 +263,7 @@ function mousePressed() {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 408 && mouseY >= 372) { // return to menu button position
       onMainMenu = true;
       isGameOver = false;
+      selectSound.play();
     }
   }
   // controls menu
@@ -265,6 +271,7 @@ function mousePressed() {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
       onMainMenu = true;
       onControlsMenu = false;
+      selectSound.play();
     }
   }
   // game logic
