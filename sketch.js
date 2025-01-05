@@ -1,5 +1,6 @@
 let isGameOver = false;
 let onMainMenu = true;
+let onControlsMenu = false;
 let isGameWon = false;
 let waveNumber = 0;
 let zombieNumber = 0;
@@ -58,7 +59,7 @@ function setup() {
 }
 
 function draw() {
-  if (isGameOver || onMainMenu || isGameWon) {
+  if (isGameOver || onMainMenu || isGameWon || onControlsMenu) {
     drawUI();
     return;
   }
@@ -153,52 +154,91 @@ function drawUI() {
     background("black");
     textFont(font);
     textSize(100);
-    fill(255,255,255);
+    fill("white");
     textAlign(CENTER);
     textSize(100);
     text("GAME OVER :(", 450, 200);
+
     textSize(50);
     text("Press R to to play again", 450, 265);
+
+    textSize(40);
+    text("Return to Main Menu", 450, 410);
+
     if (keyIsDown(82)) // R key
       resetGame();
   }
+
   else if (onMainMenu) {
     background("black");
     textFont(font);
     textSize(100);
-    fill(255,255,255);
+    fill("white");
     textAlign(CENTER);
     textSize(80);
     text("Zombie Showdown", 450, 200);
+
     textSize(55);
     text("Play", 450, 275);
+
+    textSize(42);
+    text("Controls", 450, 345);
   }
+
   else if (isGameWon) {
     background("black");
     textFont(font);
     textSize(100);
     fill(255,255,255);
     textAlign(CENTER);
+
     textSize(100);
     text("YOU WON!", 450, 200);
+
     textSize(50);
     text("You defeated the zombie horde!", 450, 260);
     text("Well done!", 450, 320);
+
     textSize(45);
     text("Press R to to play again", 450, 380);
-    if (keyIsDown(82)) // R key
-    {
+
+    textSize(40);
+    text("Return to Main Menu", 450, 500);
+    
+    if (keyIsDown(82))  { // R key
       resetGame();
       isGameWon = false;
     }
   }
+
+  else if (onControlsMenu) {
+    background("black");
+    textFont(font);
+    textSize(100);
+    fill("white");
+    textAlign(CENTER);
+
+    textSize(75);
+    text("Controls", 450, 80);
+
+    textSize(45);
+    text("WASD to move around", 450, 165);
+    text("Use mouse to aim", 450, 240);
+    text("left mouse button click to shoot", 450, 310);
+    text("Don't let the zombies get you!", 450, 385);
+
+    textSize(40);
+    text("Return to Main Menu", 450, 500);
+  }
+
   else {
     for (let i = 0; i < player.health; i++) {
       image(heartImg, i * 35, 1, 34, 34);
       noSmooth();
+
       textFont(font);
       textSize(100);
-      fill(0,0,0);
+      fill("black");
       textSize(30);
       textAlign(LEFT);
       text("Wave " + (waveNumber + 1), 2, 60);
@@ -218,12 +258,39 @@ function resetGame() {
 }
 
 function mousePressed() {
+  // main Menu
   if (onMainMenu) {
-    if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // Play button position
+    if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // play button position
       onMainMenu = false;
       resetGame();
     }
+    else if (mouseX <= 548 && mouseX >= 343 && mouseY <= 347 && mouseY >= 308) { // controls button position
+      onMainMenu = false;
+      onControlsMenu = true;
+    }
   }
+  // game Won screen
+  else if (isGameWon) {
+    if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
+      onMainMenu = true;
+      isGameWon = false;
+    }
+  }
+  // game over screen
+  else if(isGameOver) {
+    if (mouseX <= 655 && mouseX >= 235 && mouseY <= 408 && mouseY >= 372) { // return to menu button position
+      onMainMenu = true;
+      isGameOver = false;
+    }
+  }
+  // controls menu
+  else if (onControlsMenu) {
+    if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
+      onMainMenu = true;
+      onControlsMenu = false;
+    }
+  }
+  // game logic
   else if (player.attackCooldown <= 0) {
     player.attackCooldown = 6;
     let angle = atan2(mouseY - player.y, mouseX - player.x);
@@ -234,6 +301,7 @@ function mousePressed() {
       dy: sin(angle) * 10,
       angle: angle
     };
+
     bulletsArray.push(bullet);
     shootSound.play();
   }

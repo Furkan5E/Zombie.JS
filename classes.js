@@ -159,7 +159,7 @@ class MinionZombie extends Zombie {
         this.y = bossY;
         this.img = minionZombieImg;
         this.health = 1;
-        this.speed = 4;
+        this.speed = 3.5;
         this.size = [47, 38];
     }
 }
@@ -169,7 +169,7 @@ class BossZombie extends Zombie {
         super();
         this.img = bossZombieImg;
         this.health = 20;
-        this.speed = 0.5;
+        this.speed = 0.6;
         this.size = [114, 88]; 
 
         this.spawnCooldown = 0;
@@ -187,7 +187,7 @@ class BossZombie extends Zombie {
             this.spawnCooldown -= 1;
         }
         else if (this.spawnCooldown <= 0) {
-            this.spawnCooldown = 50;
+            this.spawnCooldown = 60;
             this.spawnMinions();
         }
     }
@@ -200,13 +200,13 @@ class SplitZombie extends Zombie {
         this.hasSplit = hasSplit;
         if (!this.hasSplit) {
             this.size = [61, 48];
-            this.health = 5
-            this.speed = 1;
+            this.health = 4
+            this.speed = 0.9;
         }
         else{
             this.size = [51, 40];
             this.health = 3
-            this.speed = 2.5;
+            this.speed = 2;
         }
     }
     split() {
