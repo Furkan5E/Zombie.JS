@@ -13,19 +13,20 @@ class Player {
     draw() {
         push();
         translate(this.x, this.y);
-        rotate(atan2(mouseY - this.y, mouseX - this.x));
+        rotate(atan2(mouseY - this.y, mouseX - this.x)); // face the mouse
         noSmooth();
         imageMode(CENTER);
         if (!this.hurt) {
             image(playerImg, 0, 0, 95, 95);
         }
-        else {
+        else { // play hurt animation
             image(playerHurtImg, 0, 0, 95, 95);
         }
         pop();
     }
 
     update() {
+        // update counter variables
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
         }
@@ -38,6 +39,7 @@ class Player {
     }
 
     move() {
+        // update player position
         if (keyIsDown(65) && player.x > 24) {  // A key, left
             player.x -= player.speed;
         }
@@ -56,43 +58,43 @@ class Player {
 class Zombie {
     constructor() {
         this.x = 920;
-        this.y = Math.random() * 610;
+        this.y = Math.random() * 610; // distribute randomly
         this.img = zombieImg;
         this.health = 3;
         this.speed = 2;
         this.attackCooldown = 0;
-        this.size = [57, 44];  // 154 by 120 px 
+        this.size = [57, 44];
 
         this.hurt = false;
         this.hurtCooldown = 0;
     }
 
-    move() {
+    move() { // update zombie position
         let dx = (player.x - this.x) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
         let dy = (player.y - this.y) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
 
         this.x += dx * this.speed;
         this.y += dy * this.speed;
 
-        this.angle = atan2(dy, dx);
+        this.angle = atan2(dy, dx); // work out angle to face the player
     }
 
     draw() {
         push();
         translate(this.x, this.y);
-        rotate(this.angle);
+        rotate(this.angle); // face the player
         noSmooth();
         imageMode(CENTER);
         if (!this.hurt) {
             image(this.img, 0, 0, this.size[0], this.size[1]);
         }
-        else {
+        else { // play hurt animation
             image(zombieHurtImg, 0, 0, this.size[0], this.size[1]);
         }
         pop();
     }
 
-    update() {
+    update() { // update counter variables
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
         }
@@ -105,6 +107,7 @@ class Zombie {
     }
 
     collisionCheck() {
+        // check if zombie hits player
         if (dist(player.x, player.y, this.x, this.y) < this.size[0] / 1.5) {
             if (this.attackCooldown <= 0) {
               this.attackCooldown = 60;
@@ -112,12 +115,13 @@ class Zombie {
               player.hurt = true;
               player.hurtCooldown = 3;
               playerHurtSound.play();
+              // check player health, if zero the game is over
               if (player.health <= 0) {
                 isGameOver = true;
               }
             }
           }
-
+        // check if bullet hits zombie
         for (let i = bulletsArray.length - 1; i >= 0; i--) {
             let bullet = bulletsArray[i];
             if (dist(bullet.x, bullet.y, this.x, this.y) < this.size[0] / 2) {
@@ -132,6 +136,7 @@ class Zombie {
 
 }
 
+// set each zombie type's properties
 class FastZombie extends Zombie {
     constructor() {
         super();
@@ -155,7 +160,7 @@ class StrongZombie extends Zombie {
 class MinionZombie extends Zombie {
     constructor(bossX, bossY) {
         super();
-        this.x = bossX;
+        this.x = bossX; // minion will spawn where boss is standing
         this.y = bossY;
         this.img = minionZombieImg;
         this.health = 1;
@@ -175,14 +180,15 @@ class BossZombie extends Zombie {
         this.spawnCooldown = 0;
     }
 
-    spawnMinions() {
-        let minion = new MinionZombie(this.x + Math.random(), this.y + Math.random());
+    spawnMinions() { // creates minion zombies at the boss' location
+        let minion = new MinionZombie(this.x, this.y);
         zombiesArray.push(minion);
     }
 
     update() {
-        super.update();
+        super.update(); // calls base zombie class update function
 
+        // times when to spawn minions
         if (this.spawnCooldown > 0) {
             this.spawnCooldown -= 1;
         }
@@ -198,6 +204,8 @@ class SplitZombie extends Zombie {
         super();
         this.img = splitZombieImg;
         this.hasSplit = hasSplit;
+        // set values depending on if the zombie has split
+        // if it has it will be faster but weaker
         if (!this.hasSplit) {
             this.size = [61, 48];
             this.health = 4
@@ -210,6 +218,7 @@ class SplitZombie extends Zombie {
         }
     }
     split() {
+        // splits into two zombie on death
         if (!this.hasSplit){
             let splitZombie1 = new SplitZombie(true)
             splitZombie1.x = this.x;

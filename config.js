@@ -19,6 +19,12 @@ let wavesArray = [
     [4,4,4,4,4,4,4,4,3,2,2,2,2,1,1,1],
     [1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3],
     [4,4,4,4,4,4,1,2,3,0,1,1,0]];
+    
+/* 1 = Normal zombie
+   2 = Fast zombie
+   3 = strong zombie
+   4 = split zombie 
+   0 = boss zombie */
 
 let heartImg;
 let playerImg;

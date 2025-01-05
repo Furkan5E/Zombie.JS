@@ -2,12 +2,14 @@ let isGameOver = false;
 let onMainMenu = true;
 let onControlsMenu = false;
 let isGameWon = false;
+
 let waveNumber = 0;
 let count = 0;
 let spawnCooldown = 0;
 
 let bulletsArray = [];
 let zombiesArray = [];
+
 let player = new Player();
 
 function preload() {
@@ -41,6 +43,7 @@ function draw() {
   if (isGameOver || onMainMenu || isGameWon || onControlsMenu) {
     drawUI();
     return;
+    // return so only menus are drawn
   }
   background("#b8b4b4");
   drawBullets();
@@ -50,6 +53,7 @@ function draw() {
   drawUI();
   drawZombies();
 
+  // spawn zombies in intervals, instead of all at once
   if (spawnCooldown > 0){
     spawnCooldown -= 1;
   }
@@ -60,6 +64,7 @@ function draw() {
 }
 
 function drawBullets() {
+  // update each bullet in array
   for (let i = bulletsArray.length-1; i>=0; i--) {
     let bullet = bulletsArray[i];
     bullet.x += bullet.dx;
@@ -78,10 +83,13 @@ function drawBullets() {
 function drawZombies() {
   for (let i = zombiesArray.length - 1; i >= 0; i--) {
     let zombie = zombiesArray[i];
+    // update zombie class
     zombie.move();
     zombie.draw();
     zombie.update();
     zombie.collisionCheck();
+
+    // if zombie dies remove from array
     if (zombie.health <= 0) {
       if (zombie instanceof SplitZombie)
         zombie.split();
@@ -93,6 +101,7 @@ function drawZombies() {
 function spawnZombies() {
   if (waveNumber < wavesArray.length) {
     let currentWave = wavesArray[waveNumber];
+    // checking each element of the nested waves array, in order to spawn coressponding zombies
     if (count < currentWave.length) {
       let zombieType = currentWave[count];
       if (zombieType === 1) { // normal
@@ -118,6 +127,7 @@ function spawnZombies() {
       count += 1;
     } 
     else {
+      // update counters
       waveNumber += 1;
       count = 0;
     }
@@ -129,6 +139,7 @@ function spawnZombies() {
 }
 
 function drawUI() {
+  // Game over screen
   if (isGameOver) {
     background("black");
     textFont(font);
@@ -147,7 +158,7 @@ function drawUI() {
     if (keyIsDown(82)) // R key
       resetGame();
   }
-
+// main menu
   else if (onMainMenu) {
     background("black");
     textFont(font);
@@ -163,7 +174,7 @@ function drawUI() {
     textSize(42);
     text("Controls", 450, 345);
   }
-
+// game won screen
   else if (isGameWon) {
     background("black");
     textFont(font);
@@ -189,7 +200,7 @@ function drawUI() {
       isGameWon = false;
     }
   }
-
+// controls menu
   else if (onControlsMenu) {
     background("black");
     textFont(font);
@@ -209,9 +220,10 @@ function drawUI() {
     textSize(40);
     text("Return to Main Menu", 450, 500);
   }
-
+  // display game UI elements
   else {
     for (let i = 0; i < player.health; i++) {
+      // display player lives
       image(heartImg, i * 35, 1, 34, 34);
       noSmooth();
 
@@ -220,12 +232,12 @@ function drawUI() {
       fill("black");
       textSize(30);
       textAlign(LEFT);
-      text("Wave " + (waveNumber + 1), 2, 60);
+      text("Wave " + (waveNumber + 1), 2, 60); // display wave number
     }
   }
 }
 
-function resetGame() {
+function resetGame() { // set all variables to initial values
   bulletsArray = [];
   zombiesArray = [];
   waveNumber = 0;
@@ -242,11 +254,11 @@ function mousePressed() {
     if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // play button position
       onMainMenu = false;
       selectSound.play();
-      resetGame();
+      resetGame(); // start game
     }
     else if (mouseX <= 548 && mouseX >= 343 && mouseY <= 347 && mouseY >= 308) { // controls button position
       onMainMenu = false;
-      onControlsMenu = true;
+      onControlsMenu = true; // switch to control menu
       selectSound.play();
     }
   }
@@ -277,7 +289,8 @@ function mousePressed() {
   // game logic
   else if (player.attackCooldown <= 0) {
     player.attackCooldown = 6;
-    let angle = atan2(mouseY - player.y, mouseX - player.x);
+    // create bullets
+    let angle = atan2(mouseY - player.y, mouseX - player.x); // face the mouse
     let bullet = {
       x: player.x + cos(angle) * 25,
       y: player.y + sin(angle) * 25,
