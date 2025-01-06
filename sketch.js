@@ -67,6 +67,13 @@ function drawBullets() {
   // update each bullet in array
   for (let i = bulletsArray.length-1; i>=0; i--) {
     let bullet = bulletsArray[i];
+    if (bullet.timeAlive >= 120) {
+      // remove bullets after delay
+      bulletsArray.splice(i, 1);
+    }
+
+    bullet.timeAlive += 1;
+
     bullet.x += bullet.dx;
     bullet.y += bullet.dy;
 
@@ -266,7 +273,7 @@ function mousePressed() {
   // game Won screen
   else if (isGameWon) {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-      onMainMenu = true;
+      onMainMenu = true; // switch to main menu
       isGameWon = false;
       selectSound.play();
     }
@@ -274,7 +281,7 @@ function mousePressed() {
   // game over screen
   else if(isGameOver) {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 408 && mouseY >= 372) { // return to menu button position
-      onMainMenu = true;
+      onMainMenu = true; // switch to main menu
       isGameOver = false;
       selectSound.play();
     }
@@ -282,7 +289,7 @@ function mousePressed() {
   // controls menu
   else if (onControlsMenu) {
     if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-      onMainMenu = true;
+      onMainMenu = true; // switch to main menu
       onControlsMenu = false;
       selectSound.play();
     }
@@ -297,6 +304,7 @@ function mousePressed() {
       y: player.y + sin(angle) * 25,
       dx: cos(angle) * 10,
       dy: sin(angle) * 10,
+      timeAlive: 0,
       angle: angle
     };
 
