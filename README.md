@@ -1,6 +1,6 @@
 <h1 align="center">Zombie Shootout</h1>
 
-<h3 align="center"><a href="https://furkan5e.github.io/p5js-project/">Play here</a></h3>
+<h3 align="center"><a href="https://furkan5e.github.io/Zombie-Shootout-p5.js/">Play here</a></h3>
 
 <h4 align="center">
   <img src="https://github.com/Furkan5E/Zombie-Shootout-p5.js/blob/master/assets/player.png" width="122" height="122"</img>
