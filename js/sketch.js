@@ -72,18 +72,7 @@ function drawBullets() {
       bulletsArray.splice(i, 1);
     }
 
-    bullet.timeAlive += 1;
-
-    bullet.x += bullet.dx;
-    bullet.y += bullet.dy;
-
-    push();
-    translate(bullet.x, bullet.y);
-    rotate(bullet.angle);
-    fill("yellow");
-    strokeWeight(0);
-    rect(0, -1, 14, 4.5);
-    pop();
+    bullet.draw();
   }
 }
 
@@ -298,15 +287,8 @@ function mousePressed() {
   else if (player.attackCooldown <= 0) {
     player.attackCooldown = 6;
     // create bullets
-    let angle = atan2(mouseY - player.y, mouseX - player.x); // face the mouse
-    let bullet = {
-      x: player.x + cos(angle) * 25,
-      y: player.y + sin(angle) * 25,
-      dx: cos(angle) * 10,
-      dy: sin(angle) * 10,
-      timeAlive: 0,
-      angle: angle
-    };
+    
+    let bullet = new Bullet();
 
     bulletsArray.push(bullet);
     shootSound.play();
