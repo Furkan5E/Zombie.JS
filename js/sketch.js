@@ -50,8 +50,6 @@ function draw() {
   background("#b8b4b4");
   drawBullets();
   player.draw();
-  player.update();
-  player.move();
   drawUI();
   drawZombies();
 
@@ -246,13 +244,7 @@ function mousePressed() {
     }
   }
   // game logic
-  else if (player.attackCooldown <= 0) {
-    player.attackCooldown = 6;
-    // create bullets
-    
-    let bullet = new Bullet();
-
-    bulletsArray.push(bullet);
-    shootSound.play();
+  else {
+    player.mousePressed();
   }
 }

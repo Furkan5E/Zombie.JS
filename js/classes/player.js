@@ -23,9 +23,7 @@ class Player {
             image(playerHurtImg, 0, 0, 95, 95);
         }
         pop();
-    }
 
-    update() {
         // update counter variables
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
@@ -36,21 +34,30 @@ class Player {
         else {
             this.hurt = false;
         }
-    }
 
-    move() {
         // update player position
-        if (keyIsDown(65) && player.x > 24) {  // A key, left
-            player.x -= player.speed;
+        if (keyIsDown(65) && this.x > 24) {  // A key, left
+            this.x -= this.speed;
         }
-        if (keyIsDown(68) && player.x < 876) { // D key, right
-            player.x += player.speed;
+        if (keyIsDown(68) && this.x < 876) { // D key, right
+            this.x += this.speed;
         }
-        if (keyIsDown(87) && player.y > 24) { // W key, up
-            player.y -= player.speed;
+        if (keyIsDown(87) && this.y > 24) { // W key, up
+            this.y -= this.speed;
         }
-        if (keyIsDown(83) && player.y < 576) { // S key, down
-            player.y += player.speed;
+        if (keyIsDown(83) && this.y < 576) { // S key, down
+            this.y += this.speed;
+        }
+    }
+    mousePressed() {
+        if (this.attackCooldown <= 0) {
+            this.attackCooldown = 6;
+            // create bullets
+    
+            let bullet = new Bullet();
+
+            bulletsArray.push(bullet);
+            shootSound.play();
         }
     }
 }
