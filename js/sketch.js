@@ -14,6 +14,7 @@ let player = new Player();
 let menu = new MainMenu();
 let gameOver = new GameOver();
 let gameWon = new GameWon();
+let controls = new Controls();
 
 function preload() { // load assets
   font = loadFont('assets/font.otf');
@@ -143,32 +144,16 @@ function drawUI() {
   }
 // main menu
   else if (onMainMenu) {
-    menu.draw()
+    menu.draw();
   }
 // game won screen
   else if (isGameWon) {
-    gameWon.draw()
+    gameWon.draw();
   }
 
 // controls menu
   else if (onControlsMenu) {
-    background("black");
-    textFont(font);
-    textSize(100);
-    fill("white");
-    textAlign(CENTER);
-
-    textSize(75);
-    text("Controls", 450, 80);
-
-    textSize(45);
-    text("WASD to move around", 450, 165);
-    text("Use mouse to aim", 450, 240);
-    text("left mouse button click to shoot", 450, 310);
-    text("Don't let the zombies get you!", 450, 385);
-
-    textSize(40);
-    text("Return to Main Menu", 450, 500);
+    controls.draw();
   }
   // display game UI elements
   else {
@@ -213,11 +198,7 @@ function mousePressed() {
   }
   // controls menu
   else if (onControlsMenu) {
-    if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-      onMainMenu = true; // switch to main menu
-      onControlsMenu = false;
-      selectSound.play();
-    }
+    controls.mousePressed();
   }
   // game logic
   else {
