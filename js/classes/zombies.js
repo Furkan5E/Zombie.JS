@@ -11,18 +11,18 @@ class Zombie {
         this.hurt = false;
         this.hurtCooldown = 0;
     }
-
-    move() { // update zombie position
+    
+    draw() {
+        //Movement
         let dx = (player.x - this.x) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
         let dy = (player.y - this.y) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
-
+    
         this.x += dx * this.speed;
         this.y += dy * this.speed;
-
+    
         this.angle = atan2(dy, dx); // work out angle to face the player
-    }
 
-    draw() {
+        //Visuals
         push();
         translate(this.x, this.y);
         rotate(this.angle); // face the player
@@ -35,9 +35,11 @@ class Zombie {
             image(zombieHurtImg, 0, 0, this.size[0], this.size[1]);
         }
         pop();
-    }
 
-    update() { // update counter variables
+        this.collisionCheck();
+    }
+    collisionCheck() {
+        //Cooldown checks
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
         }
@@ -47,9 +49,6 @@ class Zombie {
         else {
             this.hurt = false;
         }
-    }
-
-    collisionCheck() {
         // check if zombie hits player
         if (dist(player.x, player.y, this.x, this.y) < this.size[0] / 1.5) {
             if (this.attackCooldown <= 0) {
@@ -128,8 +127,8 @@ class BossZombie extends Zombie {
         zombiesArray.push(minion);
     }
 
-    update() {
-        super.update(); // calls base zombie class update function
+    draw() {
+        super.draw(); // calls base zombie class update function
 
         // times when to spawn minions
         if (this.spawnCooldown > 0) {

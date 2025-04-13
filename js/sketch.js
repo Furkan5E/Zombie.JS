@@ -81,11 +81,7 @@ function drawBullets() {
 function drawZombies() {
   for (let i = zombiesArray.length - 1; i >= 0; i--) {
     let zombie = zombiesArray[i];
-    // update zombie class
-    zombie.move();
     zombie.draw();
-    zombie.update();
-    zombie.collisionCheck();
 
     // if zombie dies remove from array
     if (zombie.health <= 0) {
