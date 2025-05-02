@@ -1,5 +1,6 @@
 class Controls {
-    constructor(){
+    constructor(game){
+        this.game = game;
     }
 
     draw() {
@@ -24,8 +25,7 @@ class Controls {
 
     mousePressed(){
         if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-            onMainMenu = true; // switch to main menu
-            onControlsMenu = false;
+            this.game.chosenState = this.game.menu;
             selectSound.play();
         }
     }

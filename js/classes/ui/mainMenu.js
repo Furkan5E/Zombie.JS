@@ -1,6 +1,6 @@
 class MainMenu {
-    constructor() {
-
+    constructor(game){
+        this.game = game;
     }
 
     draw() {
@@ -21,13 +21,13 @@ class MainMenu {
     
     mousePressed(){
         if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // play button position
-        onMainMenu = false;
+        this.game.gamePlaying.startGame();
         selectSound.play();
-        resetGame(); // start game
+        //resetGame(); // start game
         }
         else if (mouseX <= 548 && mouseX >= 343 && mouseY <= 347 && mouseY >= 308) { // controls button position
-        onMainMenu = false;
-        onControlsMenu = true; // switch to control menu
+        // switch to control menu
+        this.game.chosenState = this.game.controls;
         selectSound.play();
         }
     }

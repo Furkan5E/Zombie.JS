@@ -1,6 +1,6 @@
 class GameWon {
-    constructor(){
-
+    constructor(game){
+        this.game = game;
     }
 
     draw() {
@@ -24,14 +24,12 @@ class GameWon {
         text("Return to Main Menu", 450, 500);
         
         if (keyIsDown(82))  { // R key
-        resetGame();
-        isGameWon = false;
+            this.game.gamePlaying.startGame();
         }
     }
     mousePressed(){
         if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-            onMainMenu = true; // switch to main menu
-            isGameWon = false;
+            this.game.chosenState = this.game.menu;
             selectSound.play();
         }
     }

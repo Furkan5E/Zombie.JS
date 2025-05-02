@@ -49,14 +49,15 @@ class Player {
             this.y += this.speed;
         }
     }
+
     mousePressed() {
         if (this.attackCooldown <= 0) {
             this.attackCooldown = 6;
-            // create bullets
-    
-            let bullet = new Bullet();
 
-            bulletsArray.push(bullet);
+            // create bullets
+            let bullet = new Bullet();
+            game.bulletsArray.push(bullet);
+            
             shootSound.play();
         }
     }

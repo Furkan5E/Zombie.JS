@@ -14,8 +14,8 @@ class Zombie {
     
     draw() {
         //Movement
-        let dx = (player.x - this.x) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
-        let dy = (player.y - this.y) / Math.sqrt((player.x - this.x)**2 + (player.y - this.y)**2);
+        let dx = (game.player.x - this.x) / Math.sqrt((game.player.x - this.x)**2 + (game.player.y - this.y)**2);
+        let dy = (game.player.y - this.y) / Math.sqrt((game.player.x - this.x)**2 + (game.player.y - this.y)**2);
     
         this.x += dx * this.speed;
         this.y += dy * this.speed;
@@ -50,28 +50,28 @@ class Zombie {
             this.hurt = false;
         }
         // check if zombie hits player
-        if (dist(player.x, player.y, this.x, this.y) < this.size[0] / 1.5) {
+        if (dist(game.player.x, game.player.y, this.x, this.y) < this.size[0] / 1.5) {
             if (this.attackCooldown <= 0) {
               this.attackCooldown = 60;
-              player.health -= 1;
-              player.hurt = true;
-              player.hurtCooldown = 3;
+              game.player.health -= 1;
+              game.player.hurt = true;
+              game.player.hurtCooldown = 3;
               playerHurtSound.play();
               // check player health, if zero the game is over
-              if (player.health <= 0) {
-                isGameOver = true;
+              if (game.player.health <= 0) {
+                game.chosenState = game.gameOver;
               }
             }
           }
         // check if bullet hits zombie
-        for (let i = bulletsArray.length - 1; i >= 0; i--) {
-            let bullet = bulletsArray[i];
+        for (let i = game.bulletsArray.length - 1; i >= 0; i--) {
+            let bullet = game.bulletsArray[i];
             if (dist(bullet.x, bullet.y, this.x, this.y) < this.size[0] / 2) {
               this.health -= 1;
               this.hurt = true;
               this.hurtCooldown = 2;
               zombieHurtSound.play();
-              bulletsArray.splice(i, 1);
+              game.bulletsArray.splice(i, 1);
             }
         }
     }

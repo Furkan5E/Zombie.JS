@@ -1,8 +1,8 @@
 class Bullet{
     constructor(){
-        this.angle = atan2(mouseY - player.y, mouseX - player.x); // face the mouse
-        this.x = player.x + cos(this.angle) * 25;
-        this.y = player.y + sin(this.angle) * 25;
+        this.angle = atan2(mouseY - game.player.y, mouseX - game.player.x); // face the mouse
+        this.x = game.player.x + cos(this.angle) * 25;
+        this.y = game.player.y + sin(this.angle) * 25;
         this.dx = cos(this.angle) * 10;
         this.dy = sin(this.angle) * 10;
         this.timeAlive = 0;

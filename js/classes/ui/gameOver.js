@@ -1,5 +1,6 @@
 class GameOver {
-    constructor() {
+    constructor(game) {
+        this.game = game;
     }
 
     draw() {
@@ -18,13 +19,12 @@ class GameOver {
         text("Return to Main Menu", 450, 410);
 
         if (keyIsDown(82)) // R key
-            resetGame();
+            this.game.gamePlaying.startGame();
     }
     
     mousePressed(){
         if (mouseX <= 655 && mouseX >= 235 && mouseY <= 408 && mouseY >= 372) { // return to menu button position
-            onMainMenu = true; // switch to main menu
-            isGameOver = false;
+            this.game.chosenState = this.game.menu;
             selectSound.play();
         }
     }
