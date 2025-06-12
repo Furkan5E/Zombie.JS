@@ -1,31 +1,27 @@
 class GameOver {
     constructor(game) {
         this.game = game;
+        
+        this.text = [
+            new Text(450, 200, 100, "GAME OVER"),
+            new Text(450, 300, 50, "Press R to to play again"),
+            new Text(450, 370, 45, "Press ESC to return to Main Menu")
+        ];
     }
 
     draw() {
         background("black");
-        textFont(font);
-        textSize(100);
-        fill("white");
-        textAlign(CENTER);
-        textSize(100);
-        text("GAME OVER :(", 450, 200);
 
-        textSize(50);
-        text("Press R to to play again", 450, 265);
+        for (let i = 0; i < this.text.length; i++) {
+            this.text[i].draw();
+        }
 
-        textSize(40);
-        text("Return to Main Menu", 450, 410);
-
-        if (keyIsDown(82)) // R key
-            this.game.gamePlaying.startGame();
+        if (keyIsDown(KEYS.RESTART))
+            this.game.states.PLAYING.startGame();
+        else if (keyIsDown(KEYS.MENU))
+            this.game.setState("MENU");
     }
     
     mousePressed(){
-        if (mouseX <= 655 && mouseX >= 235 && mouseY <= 408 && mouseY >= 372) { // return to menu button position
-            this.game.chosenState = this.game.menu;
-            selectSound.play();
-        }
     }
 }
