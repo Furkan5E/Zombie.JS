@@ -58,7 +58,7 @@ class Player {
             let bullet = new Bullet();
             game.bulletsArray.push(bullet);
             
-            shootSound.play();
+            game.states.SETTINGS.playSFX(shootSound);
         }
     }
 }
