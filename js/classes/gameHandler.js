@@ -3,16 +3,19 @@ class GameHandler {
         this.player = new Player();
 
         //UI
-        this.menu = new MainMenu(this);
-        this.gameOver = new GameOver(this);
-        this.gameWon = new GameWon(this);
-        this.controls = new Controls(this);
-        this.gamePlaying = new GamePlaying(this);
+        this.states = {
+            MENU: new MainMenu(this),
+            PLAYING: new GamePlaying(this),
+            GAME_OVER: new GameOver(this),
+            GAME_WON: new GameWon(this),
+            CONTROLS: new Controls(this),
+            SETTINGS: new Settings(this)
+        };
+
+        this.chosenState = this.states.MENU;
 
         this.paused = false;
         this.pauseCooldown = 0;
-
-        this.chosenState = this.menu;
 
         this.bulletsArray = [];
         this.zombiesArray = [];
@@ -23,28 +26,35 @@ class GameHandler {
     }
 
     draw() {
-    if (this.chosenState === this.gamePlaying) {
-        if (this.pauseCooldown > 0) {
-            this.pauseCooldown--;
-        }
-        // toggle pause
-        if (keyIsDown(80) && this.pauseCooldown === 0){
-            this.pauseCooldown = 17;
-            this.paused = !this.paused;
-        }
+        if (this.chosenState === this.states.PLAYING) {
+            if (this.pauseCooldown > 0) { 
+                this.pauseCooldown--;
+            }
+            // toggle pause
+            if (keyIsDown(80) && this.pauseCooldown === 0){
+                this.pauseCooldown = 17;
+                this.paused = !this.paused;
+            }
 
-        if (this.paused) {
-            this.pause(); //pause game
-            return;
-        }
+            if (this.paused) {
+                this.pause();
+                return;
+            }
 
-        this.chosenState.draw();
+            this.chosenState.draw();
+        }
+        else {
+            this.paused == false;
+            this.chosenState.draw();
+        }
     }
-    else{
-        this.paused == false;
-        this.chosenState.draw();
+    
+    setState(newState) {
+        if (this.states[newState])
+            this.chosenState = this.states[newState];
+        else 
+            console.log(newState + " state doesn't exist");
     }
-}
 
     pause(){
         push();
