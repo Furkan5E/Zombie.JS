@@ -62,13 +62,14 @@ class GamePlaying {
     }
     
     startGame(){
-        this.game.chosenState = this.game.gamePlaying;
+        this.game.chosenState = this.game.states.PLAYING;
         this.game.bulletsArray = [];
         this.game.zombiesArray = [];
 
         this.game.player.x = 250;
         this.game.player.y = 325;
         this.game.player.health = 3;
+        this.game.player.hurt = false;
 
         this.game.waveNumber = 0;
         this.game.count = 0;
@@ -102,16 +103,6 @@ class GamePlaying {
         }
     }
 
-    spawnZombies() {
-        // Win condition, all waves defeated
-        if (game.waveNumber >= this.wavesArray.length) {
-            if (this.game.zombiesArray.length === 0) {
-                game.chosenState = game.gameWon;
-            }
-            return;
-        }
-    }
-
     spawnZombieByType(type){
         const ZOMBIE_TYPES = {
             1: () => new Zombie(),
@@ -129,17 +120,17 @@ class GamePlaying {
     spawnZombies() {
         //Win condition, all waves defeated
         if (this.game.waveNumber >= this.wavesArray.length) {
-            if (this.zombiesArray.length === 0) {
-                this.chosenState = this.gameWon;
+            if (this.game.zombiesArray.length === 0) {
+                this.game.setState("GAME_WON");
             }
             return;
         }
-        
+
         let currentWave = this.wavesArray[this.game.waveNumber];
 
         if (this.game.count < currentWave.length) {
             this.spawnZombieByType(currentWave[this.game.count]);
-            this.count++;
+            this.game.count++;
         } 
         else if (this.game.zombiesArray.length === 0) {
             this.game.waveNumber++;
