@@ -1,32 +1,29 @@
 class Controls {
     constructor(game){
         this.game = game;
+
+        this.text = [
+            new Text(450, 80, 75, "Controls"),
+            new Text(450, 165, 45, "WASD to move around"),
+            new Text(450, 235, 45, "Use mouse to aim"),
+            new Text(450, 305, 45, "left mouse button click to shoot"),
+            new Text(450, 375, 45, "Don't let the zombies get you!"),
+            new Text(450, 445, 45, "P to pause the game"),
+            new Text(450, 535, 37, "Press ESC to return to Main Menu")
+        ];
     }
 
     draw() {
         background("black");
-        textFont(font);
-        textSize(100);
-        fill("white");
-        textAlign(CENTER);
 
-        textSize(75);
-        text("Controls", 450, 80);
+        for (let i = 0; i < this.text.length; i++) {
+            this.text[i].draw();
+        }
 
-        textSize(45);
-        text("WASD to move around", 450, 165);
-        text("Use mouse to aim", 450, 240);
-        text("left mouse button click to shoot", 450, 310);
-        text("Don't let the zombies get you!", 450, 385);
-
-        textSize(40);
-        text("Return to Main Menu", 450, 500);
+        if (keyIsDown(KEYS.MENU))
+            this.game.setState("MENU");
     }
 
     mousePressed(){
-        if (mouseX <= 655 && mouseX >= 235 && mouseY <= 503 && mouseY >= 465) { // return to menu button position
-            this.game.chosenState = this.game.menu;
-            selectSound.play();
-        }
     }
 }
