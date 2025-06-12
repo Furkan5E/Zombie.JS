@@ -56,10 +56,10 @@ class Zombie {
               game.player.health -= 1;
               game.player.hurt = true;
               game.player.hurtCooldown = 3;
-              playerHurtSound.play();
+              game.states.SETTINGS.playSFX(playerHurtSound);
               // check player health, if zero the game is over
               if (game.player.health <= 0) {
-                game.chosenState = game.gameOver;
+                game.setState("GAME_OVER");
               }
             }
           }
@@ -70,7 +70,7 @@ class Zombie {
               this.health -= 1;
               this.hurt = true;
               this.hurtCooldown = 2;
-              zombieHurtSound.play();
+              game.states.SETTINGS.playSFX(zombieHurtSound);
               game.bulletsArray.splice(i, 1);
             }
         }
