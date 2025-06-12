@@ -1,34 +1,37 @@
 class MainMenu {
     constructor(game){
         this.game = game;
+        
+        this.buttons = [
+            new Button(450, 275, 150, 65, 60, "Play", () => {
+                this.game.setState("PLAYING");
+                this.game.states.PLAYING.startGame();
+                this.game.states.SETTINGS.playSFX(selectSound);
+            }),
+            new Button(450, 345, 230, 55, 50, "Settings", () => {
+                this.game.setState("SETTINGS");
+                this.game.states.SETTINGS.playSFX(selectSound);
+            }),
+            new Button(450, 415, 225, 55, 45, "Controls", () => {
+                this.game.setState("CONTROLS");
+                this.game.states.SETTINGS.playSFX(selectSound);
+            })
+        ];
+        this.title = new Text(450, 160, 80, "Zombie Showdown");
     }
 
     draw() {
         background("black");
-        textFont(font);
-        textSize(100);
-        fill("white");
-        textAlign(CENTER);
-        textSize(80);
-        text("Zombie Showdown", 450, 200);
+        this.title.draw();
 
-        textSize(55);
-        text("Play", 450, 275);
-
-        textSize(42);
-        text("Controls", 450, 345);
+        for (let i = 0; i < this.buttons.length; i++) {
+            this.buttons[i].draw();
+        }
     }
     
     mousePressed(){
-        if (mouseX <= 520 && mouseX >= 365 && mouseY <= 275 && mouseY >= 225) { // play button position
-        this.game.gamePlaying.startGame();
-        selectSound.play();
-        //resetGame(); // start game
-        }
-        else if (mouseX <= 548 && mouseX >= 343 && mouseY <= 347 && mouseY >= 308) { // controls button position
-        // switch to control menu
-        this.game.chosenState = this.game.controls;
-        selectSound.play();
+        for (let i = 0; i < this.buttons.length; i++) {
+            this.buttons[i].mousePressed()
         }
     }
 }
