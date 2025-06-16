@@ -1,23 +1,25 @@
 class Bullet{
-    constructor(){
-        this.angle = atan2(mouseY - game.player.y, mouseX - game.player.x); // face the mouse
-        this.x = game.player.x + cos(this.angle) * 25;
-        this.y = game.player.y + sin(this.angle) * 25;
+    constructor(playerX, playerY, angle){
+        this.angle = angle;
+        this.x = playerX + cos(this.angle) * 33;
+        this.y = playerY + sin(this.angle) * 33;
         this.dx = cos(this.angle) * 10;
         this.dy = sin(this.angle) * 10;
         this.timeAlive = 0;
     }
 
-    draw() {
+    update() {
         this.timeAlive += 1;
         this.x += this.dx;
         this.y += this.dy;
+    }
 
+    draw() {
         push();
         translate(this.x, this.y);
         rotate(this.angle);
         fill("yellow");
-        strokeWeight(0);
+        noStroke();
         rect(0, -1, 14, 4.5);
         pop();
     }

@@ -1,7 +1,5 @@
 class GameHandler {
     constructor() {
-        this.player = new Player();
-
         //UI
         this.states = {
             MENU: new MainMenu(this),
@@ -16,13 +14,6 @@ class GameHandler {
 
         this.paused = false;
         this.pauseCooldown = 0;
-
-        this.bulletsArray = [];
-        this.zombiesArray = [];
-
-        this.waveNumber = 0;
-        this.count = 0;
-        this.spawnCooldown = 0;
     }
 
     draw() {
@@ -30,38 +21,50 @@ class GameHandler {
             if (this.pauseCooldown > 0) { 
                 this.pauseCooldown--;
             }
-            // toggle pause
-            if (keyIsDown(80) && this.pauseCooldown === 0){
+
+            //toggle pause with P
+            if (keyIsDown(KEYS.PAUSE) && this.pauseCooldown === 0){
                 this.pauseCooldown = 17;
                 this.paused = !this.paused;
             }
 
-            if (this.paused) {
-                this.pause();
-                return;
+            if (!this.paused) {
+                this.chosenState.update();
             }
 
             this.chosenState.draw();
+
+            if (this.paused) {
+                this.pauseOverlay();
+            }
         }
         else {
-            this.paused == false;
+            //reset paused bool
+            this.paused = false;
             this.chosenState.draw();
         }
     }
+
+    pauseOverlay() {
+        push();
+        noStroke()
+        fill(0, 175);
+        rect(0, 0, width*2, height*2);
+
+        textAlign(CENTER, CENTER);
+        textSize(64);
+        fill(255);
+        text("PAUSED", width / 2, height / 2 - 25);
+        pop();
+    }
+
+
     
     setState(newState) {
         if (this.states[newState])
             this.chosenState = this.states[newState];
         else 
             console.log(newState + " state doesn't exist");
-    }
-
-    pause(){
-        push();
-        textAlign(CENTER, CENTER);
-        textSize(64);
-        text("PAUSED", width /2, height/2 - 25);
-        pop();
     }
 
     mousePressed() {

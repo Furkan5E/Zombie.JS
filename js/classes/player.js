@@ -4,61 +4,72 @@ class Player {
         this.y = 325;
         this.speed = 5;
         this.health = 3;
+
         this.attackCooldown = 0;
 
         this.hurt = false;
         this.hurtCooldown = 0;
+
+        this.angle = 0;
     }
 
-    draw() {
-        push();
-        translate(this.x, this.y);
-        rotate(atan2(mouseY - this.y, mouseX - this.x)); // face the mouse
-        noSmooth();
-        imageMode(CENTER);
-        if (!this.hurt) {
-            image(playerImg, 0, 0, 95, 95);
+    update(){
+        //movement
+        if (keyIsDown(65) && this.x > 24) {  // A
+            this.x -= this.speed;
         }
-        else { // play hurt animation
-            image(playerHurtImg, 0, 0, 95, 95);
+        if (keyIsDown(68) && this.x < width - 24) { // D
+            this.x += this.speed;
         }
-        pop();
+        if (keyIsDown(87) && this.y > 24) { // W
+            this.y -= this.speed;
+        }
+        if (keyIsDown(83) && this.y < height - 24) { // S
+            this.y += this.speed;
+        }
 
-        // update counter variables
+        //aim
+        this.angle = atan2(mouseY - this.y, mouseX - this.x);
+
+        //cooldowns
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
         }
         if (this.hurtCooldown > 0) {
             this.hurtCooldown -= 1;
-        }
-        else {
+        } else {
             this.hurt = false;
         }
+    }
 
-        // update player position
-        if (keyIsDown(65) && this.x > 24) {  // A key, left
-            this.x -= this.speed;
+    draw() {
+        push();
+        translate(this.x, this.y);
+        rotate(this.angle);
+        noSmooth();
+        imageMode(CENTER);
+        if (!this.hurt) {
+            image(playerImg, 0, 0, 95, 95);
         }
-        if (keyIsDown(68) && this.x < 876) { // D key, right
-            this.x += this.speed;
+        else{
+            image(playerHurtImg, 0, 0, 95, 95);
         }
-        if (keyIsDown(87) && this.y > 24) { // W key, up
-            this.y -= this.speed;
-        }
-        if (keyIsDown(83) && this.y < 576) { // S key, down
-            this.y += this.speed;
-        }
+        pop();
+    }
+
+    takeDamage() {
+        this.health--;
+        this.hurt = true;
+        this.hurtCooldown = 3;
+        game.states.SETTINGS.playSFX(playerHurtSound);
     }
 
     mousePressed() {
         if (this.attackCooldown <= 0) {
             this.attackCooldown = 6;
-
-            // create bullets
-            let bullet = new Bullet();
-            game.bulletsArray.push(bullet);
-            
+            let bullet = new Bullet(this.x, this.y, this.angle);
             game.states.SETTINGS.playSFX(shootSound);
+            return bullet;
         }
     }
 }

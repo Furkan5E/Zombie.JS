@@ -1,6 +1,16 @@
 class GamePlaying {
     constructor(game) {
         this.game = game;
+        this.player = new Player();
+
+        this.bulletsArray = [];
+        this.zombiesArray = [];
+
+        this.waveNumber = 0;
+        this.count = 0;
+        this.spawnCooldown = 0;
+        
+        this.healthBar = new HealthBar();
 
         this.wavesArray = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -26,115 +36,156 @@ class GamePlaying {
         ];
     }
 
-    draw() {
-        background("#b8b4b4");
+    update() {
+        this.player.update();
 
-        this.drawBullets();
-        this.game.player.draw();
-        this.drawZombies();
-
-        // draw UI
-        for (let i = 0; i < this.game.player.health; i++) {
-            // display player lives
-            image(heartImg, i * 35, 1, 34, 34);
-            noSmooth();
-
-            textFont(font);
-            textSize(100);
-            fill("black");
-            textSize(30);
-            textAlign(LEFT);
-            // display wave number
-            text("Wave " + (this.game.waveNumber + 1), 2, 60);
-        }
-
-        if (this.game.spawnCooldown > 0) {
-            this.game.spawnCooldown--;
-        }
-        else{
-            this.game.spawnCooldown = 60;
+        //spawn new zombies
+        if (this.spawnCooldown > 0)
+            this.spawnCooldown--;
+        else {
+            this.spawnCooldown = 60;
             this.spawnZombies();
         }
+
+        //update bullets
+        for (let i = this.bulletsArray.length - 1; i >= 0; i--) {
+            const bullet = this.bulletsArray[i];
+            bullet.update();
+
+            if (bullet.timeAlive >= 100) {
+                this.bulletsArray.splice(i, 1);
+                continue;
+            }
+
+            //bullet collision check
+            for (let j = this.zombiesArray.length - 1; j >= 0; j--) {
+                const zombie = this.zombiesArray[j];
+                if (dist(bullet.x, bullet.y, zombie.x, zombie.y) < zombie.size[0] / 2) {
+                    zombie.takeDamage(1);
+                    this.bulletsArray.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        //zombies
+        for (let i = this.zombiesArray.length - 1; i >= 0; i--) {
+            const zombie = this.zombiesArray[i];
+            zombie.update();
+
+            //boss minion spawn
+            if (zombie instanceof BossZombie) {
+                const minion = zombie.spawnMinion();
+                if (minion)
+                    this.zombiesArray.push(minion);
+            }
+
+            //handle deaths
+            if (zombie.health <= 0) {
+                if (zombie instanceof SplitZombie) {
+                    const newZombies = zombie.split();
+                    if (newZombies) this.zombiesArray.push(...newZombies);
+                }
+                this.zombiesArray.splice(i, 1);
+                continue;
+            }
+
+            //zombie-player collision
+            if (dist(zombie.x, zombie.y, this.player.x, this.player.y) < zombie.size[0] / 2){
+                zombie.attack();
+            }
+        }
+
+        //player health check
+        if (this.player.health <= 0) {
+            this.game.setState("GAME_OVER");
+            return;
+        }
     }
 
-    mousePressed() {
-        this.game.player.mousePressed();
+    
+    draw() {
+        background("#b8b4b4");
+        
+        //draw bullets
+        for (let bullet of this.bulletsArray) {
+            bullet.draw();
+        }
+        
+        //draw player
+        this.player.draw();
+        
+        //draw zombies
+        for (let zombie of this.zombiesArray) {
+            zombie.draw();
+        }
+        
+        //draw UI
+        this.healthBar.draw(this.player.health);
+        
+        textFont(font);
+        textSize(100);
+        fill("black");
+        textSize(30);
+        textAlign(LEFT);
+        text("Wave " + (this.waveNumber + 1), 2, 45);
     }
+    
+    mousePressed() {
+        let bullet = this.player.mousePressed();
+        if (bullet){
+            this.bulletsArray.push(bullet);
+        }
+    }
+    
     
     startGame(){
         this.game.chosenState = this.game.states.PLAYING;
-        this.game.bulletsArray = [];
-        this.game.zombiesArray = [];
+        this.bulletsArray = [];
+        this.zombiesArray = [];
 
-        this.game.player.x = 250;
-        this.game.player.y = 325;
-        this.game.player.health = 3;
-        this.game.player.hurt = false;
+        this.player.x = 250;
+        this.player.y = 325;
+        this.player.health = 3;
+        this.player.hurt = false;
 
-        this.game.waveNumber = 0;
-        this.game.count = 0;
-    }
-
-    drawBullets() {
-        // update each bullet in array
-        for (let i = this.game.bulletsArray.length-1; i>=0; i--) {
-            let bullet = this.game.bulletsArray[i];
-            if (bullet.timeAlive >= 100) {
-                // remove bullets after delay
-                this.game.bulletsArray.splice(i, 1);
-            }
-
-            bullet.draw();
-        }
+        this.waveNumber = 0;
+        this.count = 0;
     }
     
 
-    drawZombies() {
-        for (let i = this.game.zombiesArray.length - 1; i >= 0; i--) {
-            let zombie = this.game.zombiesArray[i];
-            zombie.draw();
-
-            // if zombie dies, remove from array
-            if (zombie.health <= 0) {
-                if (zombie instanceof SplitZombie)
-                    zombie.split();
-                this.game.zombiesArray.splice(i, 1);
-            }
-        }
-    }
-
     spawnZombieByType(type){
         const ZOMBIE_TYPES = {
-            1: () => new Zombie(),
-            2: () => new FastZombie(),
-            3: () => new StrongZombie(),
-            4: () => new SplitZombie(false),
-            0: () => new BossZombie(),
+            1: () => new Zombie(this.player),
+            2: () => new FastZombie(this.player),
+            3: () => new StrongZombie(this.player),
+            4: () => new SplitZombie(this.player, false),
+            0: () => new BossZombie(this.player),
         };
         //check if type exists
         if (ZOMBIE_TYPES[type]) {
-            this.game.zombiesArray.push(ZOMBIE_TYPES[type]());
+            this.zombiesArray.push(ZOMBIE_TYPES[type]());
         }
     }
 
     spawnZombies() {
         //Win condition, all waves defeated
-        if (this.game.waveNumber >= this.wavesArray.length) {
-            if (this.game.zombiesArray.length === 0) {
+        if (this.waveNumber >= this.wavesArray.length) {
+            if (this.zombiesArray.length === 0) {
                 this.game.setState("GAME_WON");
             }
             return;
         }
 
-        let currentWave = this.wavesArray[this.game.waveNumber];
+        let currentWave = this.wavesArray[this.waveNumber];
 
-        if (this.game.count < currentWave.length) {
-            this.spawnZombieByType(currentWave[this.game.count]);
-            this.game.count++;
+        if (this.count < currentWave.length) {
+            this.spawnZombieByType(currentWave[this.count]);
+            this.count++;
         } 
-        else if (this.game.zombiesArray.length === 0) {
-            this.game.waveNumber++;
-            this.game.count = 0;
+        else if (this.zombiesArray.length === 0) {
+            this.waveNumber++;
+            this.count = 0;
         }
     }
 }
