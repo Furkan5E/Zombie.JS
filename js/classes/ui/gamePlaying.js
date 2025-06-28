@@ -147,7 +147,7 @@ class GamePlaying {
         this.player.x = 250;
         this.player.y = 325;
         this.player.health = 3;
-        this.player.hurt = false;
+        this.player.hurtIntensity = 0;
 
         this.waveNumber = 0;
         this.count = 0;

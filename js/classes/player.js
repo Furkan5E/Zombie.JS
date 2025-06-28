@@ -6,9 +6,7 @@ class Player {
         this.health = 3;
 
         this.attackCooldown = 0;
-
-        this.hurt = false;
-        this.hurtCooldown = 0;
+        this.hurtIntensity = 0;
 
         this.angle = 0;
     }
@@ -31,14 +29,14 @@ class Player {
         //aim
         this.angle = atan2(mouseY - this.y, mouseX - this.x);
 
-        //cooldowns
+        //attack cooldown
         if (this.attackCooldown > 0) {
             this.attackCooldown -= 1;
         }
-        if (this.hurtCooldown > 0) {
-            this.hurtCooldown -= 1;
-        } else {
-            this.hurt = false;
+
+        //hurt effect tint fade out
+        if (this.hurtIntensity > 0){
+            this.hurtIntensity -= 0.05;
         }
     }
 
@@ -48,19 +46,19 @@ class Player {
         rotate(this.angle);
         noSmooth();
         imageMode(CENTER);
-        if (!this.hurt) {
-            image(playerImg, 0, 0, 95, 95);
-        }
-        else{
-            image(playerHurtImg, 0, 0, 95, 95);
-        }
+
+        let r = lerp(255, 255, this.hurtIntensity);
+        let g = lerp(255, 0, this.hurtIntensity);
+        let b = lerp(255, 0, this.hurtIntensity);
+        tint(r, g, b);
+
+        image(playerImg, 0, 0, 95, 95);
         pop();
     }
 
     takeDamage() {
         this.health--;
-        this.hurt = true;
-        this.hurtCooldown = 3;
+        this.hurtIntensity = 1;
         game.states.SETTINGS.playSFX(playerHurtSound);
     }
 
