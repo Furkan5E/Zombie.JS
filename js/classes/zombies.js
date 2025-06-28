@@ -8,8 +8,7 @@ class Zombie {
         this.attackCooldown = 0;
         this.size = [57, 44];
 
-        this.hurt = false;
-        this.hurtCooldown = 0;
+        this.hurtIntensity = 0;
 
         this.player = player;
     }
@@ -23,14 +22,15 @@ class Zombie {
         this.y += dy * this.speed;
 
         this.angle = atan2(dy, dx);
-        
-        if (this.hurtCooldown > 0)
-            this.hurtCooldown--;
-        else
-            this.hurt = false;
 
-        if(this.attackCooldown > 0)
-            this.attackCooldown--;
+        //attack cooldown
+        if(this.attackCooldown > 0){
+            this.attackCooldown -= 1;
+        }
+        //hurt effect tint fade out
+        if (this.hurtIntensity > 0){
+            this.hurtIntensity -= 0.05;
+        }
     }
     
     draw() {
@@ -39,15 +39,17 @@ class Zombie {
         imageMode(CENTER);
         translate(this.x, this.y);
         rotate(this.angle);
-        image(this.hurt ? zombieHurtImg : this.img, 0, 0, this.size[0], this.size[1]);
+
+        tint(255, 255 * (1 - this.hurtIntensity)); // fade to white
+
+
+        image(this.img, 0, 0, this.size[0], this.size[1]);
         pop();
-        
     }
 
     takeDamage() {
         this.health--;
-        this.hurt = true;
-        this.hurtCooldown = 2;
+        this.hurtIntensity = 1;
         game.states.SETTINGS.playSFX(zombieHurtSound);
     }
 
