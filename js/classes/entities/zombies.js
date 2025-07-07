@@ -50,7 +50,7 @@ class Zombie {
     takeDamage() {
         this.health--;
         this.hurtIntensity = 1;
-        game.states.SETTINGS.playSFX(zombieHurtSound);
+        game.audio.playSFX(zombieHurtSound);
     }
 
     attack() {
@@ -146,7 +146,7 @@ class SplitZombie extends Zombie {
             splitZombie2.x = this.x;
             splitZombie2.y = this.y - 22;
 
-            game.states.SETTINGS.playSFX(splitSound);
+            game.audio.playSFX(splitSound);
             return [splitZombie1, splitZombie2];
         }
     }

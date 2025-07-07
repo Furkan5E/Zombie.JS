@@ -2,7 +2,7 @@ let game = new GameHandler();
 
 function setup() {
   createCanvas(900, 600);
-  game.states.SETTINGS.playMusic(backgroundMusic)
+  game.audio.playMusic(backgroundMusic);
 }
 
 function draw() {

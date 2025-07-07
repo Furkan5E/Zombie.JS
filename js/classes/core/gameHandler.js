@@ -9,6 +9,7 @@ class GameHandler {
             CONTROLS: new Controls(this),
             SETTINGS: new Settings(this)
         };
+        this.audio = new AudioManger();
 
         this.chosenState = this.states.MENU;
 

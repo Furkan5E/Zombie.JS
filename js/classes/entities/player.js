@@ -59,14 +59,14 @@ class Player {
     takeDamage() {
         this.health--;
         this.hurtIntensity = 1;
-        game.states.SETTINGS.playSFX(playerHurtSound);
+        game.audio.playSFX(playerHurtSound);
     }
 
     mousePressed() {
         if (this.attackCooldown <= 0) {
             this.attackCooldown = 6;
             let bullet = new Bullet(this.x, this.y, this.angle);
-            game.states.SETTINGS.playSFX(shootSound);
+            game.audio.playSFX(shootSound);
             return bullet;
         }
     }
