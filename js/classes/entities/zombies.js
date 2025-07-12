@@ -11,6 +11,7 @@ class Zombie {
         this.hurtIntensity = 0;
 
         this.player = player;
+        this.value = 1;
     }
 
     update(){
@@ -70,6 +71,7 @@ class FastZombie extends Zombie {
         this.health = 2;
         this.speed =3;
         this.size = [51, 40];
+        this.value = 1;
     }
 }
 
@@ -80,6 +82,7 @@ class StrongZombie extends Zombie {
         this.health = 5;
         this.speed = 1.5;
         this.size = [61, 48];
+        this.value = 3;
     }
 }
 
@@ -92,6 +95,7 @@ class MinionZombie extends Zombie {
         this.health = 1;
         this.speed = 3.5;
         this.size = [47, 38];
+        this.value = 0;
     }
 }
 
@@ -104,6 +108,7 @@ class BossZombie extends Zombie {
         this.size = [114, 88]; 
 
         this.spawnCooldown = 0;
+        this.value = 10;
     }
 
     spawnMinion() {
@@ -129,11 +134,13 @@ class SplitZombie extends Zombie {
             this.size = [61, 48];
             this.health = 4
             this.speed = 0.9;
+            this.value = 5;
         }
         else{
             this.size = [51, 40];
             this.health = 3
             this.speed = 2;
+            this.value = 2;
         }
     }
     split() {

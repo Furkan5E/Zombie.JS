@@ -9,6 +9,7 @@ class Player {
         this.hurtIntensity = 0;
 
         this.angle = 0;
+        this.money = 0;
     }
 
     update(){

@@ -7,6 +7,7 @@ const KEYS = {
 
 //asset handling
 let heartImg;
+let moneyImg;
 let playerImg;
 let zombieImg;
 let fastZombieImg;
@@ -27,6 +28,7 @@ function preload() { // load assets
   font = loadFont('assets/font.otf');
 
   heartImg = loadImage("assets/heart.png");
+  moneyImg = loadImage("assets/money.png");
   playerImg = loadImage("assets/player.png");
   zombieImg = loadImage("assets/zombie.png");
   fastZombieImg = loadImage("assets/fastZombie.png");

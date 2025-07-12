@@ -87,6 +87,7 @@ class GamePlaying {
                     if (newZombies) this.zombiesArray.push(...newZombies);
                 }
                 this.zombiesArray.splice(i, 1);
+                this.player.money += zombie.value;
                 continue;
             }
 
@@ -128,7 +129,9 @@ class GamePlaying {
         fill("black");
         textSize(30);
         textAlign(LEFT);
-        text("Wave " + (this.waveNumber + 1), 2, 45);
+        image(moneyImg, 2, 35, 34, 34);
+        text(": "+ this.player.money, 40, 48);
+        text("Wave: " + (this.waveNumber + 1), 2, 79);
     }
     
     mousePressed() {
@@ -148,6 +151,7 @@ class GamePlaying {
         this.player.y = 325;
         this.player.health = 3;
         this.player.hurtIntensity = 0;
+        this.player.money = 0;
 
         this.waveNumber = 0;
         this.count = 0;
