@@ -1,8 +1,13 @@
 //constants
 const KEYS = {
-    PAUSE: 80,   // P
-    RESTART: 82, // R
-    MENU: 27     // Esc
+  MOVE_UP: 87,    // W
+  MOVE_DOWN: 83,  // S
+  MOVE_LEFT: 65,  // A
+  MOVE_RIGHT: 68, // D
+
+  PAUSE: 80,      // P
+  RESTART: 82,    // R
+  MENU: 27        // Esc
 };
 
 //asset handling

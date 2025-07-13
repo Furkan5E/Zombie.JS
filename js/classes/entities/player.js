@@ -14,16 +14,16 @@ class Player {
 
     update(){
         //movement
-        if (keyIsDown(65) && this.x > 24) {  // A
+        if (keyIsDown(KEYS.MOVE_LEFT) && this.x > 24) {  // A
             this.x -= this.speed;
         }
-        if (keyIsDown(68) && this.x < width - 24) { // D
+        if (keyIsDown(KEYS.MOVE_RIGHT) && this.x < width - 24) { // D
             this.x += this.speed;
         }
-        if (keyIsDown(87) && this.y > 24) { // W
+        if (keyIsDown(KEYS.MOVE_UP) && this.y > 24) { // W
             this.y -= this.speed;
         }
-        if (keyIsDown(83) && this.y < height - 24) { // S
+        if (keyIsDown(KEYS.MOVE_DOWN) && this.y < height - 24) { // S
             this.y += this.speed;
         }
 
