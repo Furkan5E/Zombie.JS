@@ -1,5 +1,5 @@
 class Settings {
-    constructor(game){
+    constructor(game) {
         this.game = game;
 
         this.text = [
@@ -7,21 +7,31 @@ class Settings {
             new Text(450, 535, 37, "Press ESC to return to Main Menu")
         ];
         
-        this.musicToggle = new Button(450, 190, 250, 50, 50, "Music: ON ", () => {
-            this.game.audio.musicON = !this.game.audio.musicON;
-            this.musicToggle.text.label = this.game.audio.musicON ? "Music: ON " : "Music: OFF";
-            this.musicToggle.text.color = this.game.audio.musicON ? "green" : "red";
+        this.musicToggle = new Button(450, 190, 250, 50, 50, "Music: ON", () => {
+            this.game.settingsManager.toggleMusic();
+            this.buttonStates();
+            this.game.audio.playSFX(selectSound);
             this.game.audio.playMusic(backgroundMusic);
+        });
+        this.sfxToggle = new Button(450, 260, 240, 50, 50, "SFX: ON", () => {
+            this.game.settingsManager.toggleSFX();
+            this.buttonStates();
             this.game.audio.playSFX(selectSound);
-        })
-        this.sfxToggle = new Button(450, 260, 240, 50, 50, "SFX: ON ", () => {
-            this.game.audio.sfxON = !this.game.audio.sfxON;
-            this.sfxToggle.text.label = this.game.audio.sfxON ? "SFX: ON " : "SFX: OFF";
-            this.sfxToggle.text.color = this.game.audio.sfxON ? "green" : "red";
-            this.game.audio.playSFX(selectSound);
-        })
-        this.sfxToggle.text.color = "green";
-        this.musicToggle.text.color = "green";
+        }); 
+        this.buttonStates();
+
+    }
+    
+    buttonStates(){
+        const musicON = this.game.settingsManager.settings.musicON;
+        const sfxON = this.game.settingsManager.settings.sfxON;
+
+        this.musicToggle.text.label = musicON ? "Music: ON" : "Music: OFF";
+        this.musicToggle.text.color = musicON ? "green" : "red";
+
+        this.sfxToggle.text.label = sfxON ? "SFX: ON" : "SFX: OFF";
+        this.sfxToggle.text.color = sfxON ? "green" : "red";
+        
     }
 
     draw() {

@@ -1,6 +1,8 @@
 class GameHandler {
     constructor() {
         //UI
+        this.settingsManager = new SettingsManager();
+        this.audio = new AudioManager(this.settingsManager);
         this.states = {
             MENU: new MainMenu(this),
             PLAYING: new GamePlaying(this),
@@ -9,7 +11,6 @@ class GameHandler {
             CONTROLS: new Controls(this),
             SETTINGS: new Settings(this)
         };
-        this.audio = new AudioManger();
 
         this.chosenState = this.states.MENU;
 
