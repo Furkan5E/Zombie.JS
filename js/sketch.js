@@ -1,7 +1,8 @@
 let game = new GameHandler();
 
 function setup() {
-  createCanvas(900, 600);
+  let canvas =createCanvas(900, 600);
+  canvas.parent("canvas");
   game.audio.playMusic(backgroundMusic);
 }
 

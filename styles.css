@@ -1,9 +1,16 @@
 html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
-    background-color: gray;
-  }
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gray;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: "font";
+  src: url("./assets/font.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}

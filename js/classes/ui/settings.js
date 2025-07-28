@@ -7,13 +7,13 @@ class Settings {
             new Text(450, 535, 37, "Press ESC to return to Main Menu")
         ];
         
-        this.musicToggle = new Button(450, 190, 250, 50, 50, "Music: ON", () => {
+        this.musicToggle = new Button(450, 190, 250, 50, 50, "Music: ON", false, () => {
             this.game.settingsManager.toggleMusic();
             this.buttonStates();
             this.game.audio.playSFX(selectSound);
             this.game.audio.playMusic(backgroundMusic);
         });
-        this.sfxToggle = new Button(450, 260, 240, 50, 50, "SFX: ON", () => {
+        this.sfxToggle = new Button(450, 260, 240, 50, 50, "SFX: ON", false, () => {
             this.game.settingsManager.toggleSFX();
             this.buttonStates();
             this.game.audio.playSFX(selectSound);
