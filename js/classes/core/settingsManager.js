@@ -11,17 +11,23 @@ class SettingsManager {
 
     loadSettings(){
         const saved = localStorage.getItem("zombiejs_settings");
-        if (saved) {
-            return JSON.parse(saved);
+        if (saved && saved !== 'undefined') {
+            try {
+                return JSON.parse(saved);
+            } catch (error) {
+                console.warn("Error: ", error);
+                return { ...this.defaultSettings };
+            }
         }
         else{
-            this.saveSettings(this.defaultSettings);
-            return this.defaultSettings;
+            return { ...this.defaultSettings };
         }
     }
 
     saveSettings() {
-        localStorage.setItem("zombiejs_settings", JSON.stringify(this.settings));
+        if (this.settings) {
+            localStorage.setItem("zombiejs_settings", JSON.stringify(this.settings));
+        }
     }
 
     toggleMusic() {
