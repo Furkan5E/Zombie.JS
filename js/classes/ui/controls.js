@@ -8,13 +8,17 @@ class Controls {
             new Text(450, 235, 45, "Use mouse to aim"),
             new Text(450, 305, 45, "left mouse button click to shoot"),
             new Text(450, 375, 45, "Don't let the zombies get you!"),
-            new Text(450, 445, 45, "P to pause the game"),
-            new Text(450, 535, 37, "Press ESC to return to Main Menu")
+            new Text(450, 445, 45, "P to pause the game")
         ];
+        this.backButton = new Button(450, 535, 645, 34, 37, "Press ESC to return to Main Menu", true, () => {
+            this.game.setState("MENU");
+            this.game.audio.playSFX(selectSound);
+        });
     }
 
     draw() {
         background("black");
+        this.backButton.draw();
 
         for (let i = 0; i < this.text.length; i++) {
             this.text[i].draw();
@@ -25,5 +29,6 @@ class Controls {
     }
 
     mousePressed(){
+        this.backButton.mousePressed();
     }
 }

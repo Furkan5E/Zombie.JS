@@ -2,10 +2,12 @@ class Settings {
     constructor(game) {
         this.game = game;
 
-        this.text = [
-            new Text(450, 80, 75, "Settings"),
-            new Text(450, 535, 37, "Press ESC to return to Main Menu")
-        ];
+        this.title = new Text(450, 80, 75, "Settings");
+
+        this.backButton = new Button(450, 535, 645, 34, 37, "Press ESC to return to Main Menu", true, () => {
+            this.game.setState("MENU");
+            this.game.audio.playSFX(selectSound);
+        });
         
         this.musicToggle = new Button(450, 190, 250, 50, 50, "Music: ON", false, () => {
             this.game.settingsManager.toggleMusic();
@@ -36,10 +38,8 @@ class Settings {
 
     draw() {
         background("black")
-        for (let i = 0; i < this.text.length; i++) {
-            this.text[i].draw();
-        }
-
+       this.title.draw();
+       this.backButton.draw();
         this.musicToggle.draw();
         this.sfxToggle.draw();
 
@@ -50,5 +50,6 @@ class Settings {
     mousePressed(){
         this.musicToggle.mousePressed();
         this.sfxToggle.mousePressed();
+        this.backButton.mousePressed();
     }
 }

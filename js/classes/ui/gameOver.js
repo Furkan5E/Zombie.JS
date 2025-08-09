@@ -2,19 +2,25 @@ class GameOver {
     constructor(game) {
         this.game = game;
         
-        this.text = [
-            new Text(450, 200, 100, "GAME OVER"),
-            new Text(450, 300, 50, "Press R to to play again"),
-            new Text(450, 370, 45, "Press ESC to return to Main Menu")
-        ];
+        this.title = new Text(450, 200, 100, "GAME OVER");
+        
+        this.restartButton = new Button(450, 300, 620, 42, 50, "Press R to to play again", true, () => {
+            this.game.states.PLAYING.startGame();
+            this.game.audio.playSFX(selectSound);
+        });
+        
+        this.backButton = new Button(450, 370, 790, 40, 45, "Press ESC to return to Main Menu", true, () => {
+            this.game.setState("MENU");
+            this.game.audio.playSFX(selectSound);
+        });
     }
 
     draw() {
         background("black");
 
-        for (let i = 0; i < this.text.length; i++) {
-            this.text[i].draw();
-        }
+        this.title.draw();
+        this.backButton.draw();
+        this.restartButton.draw();
 
         if (keyIsDown(KEYS.RESTART))
             this.game.states.PLAYING.startGame();
@@ -23,5 +29,7 @@ class GameOver {
     }
     
     mousePressed(){
+        this.restartButton.mousePressed();
+        this.backButton.mousePressed();
     }
 }
