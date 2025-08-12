@@ -17,10 +17,11 @@ class Bullet{
     draw() {
         push();
         translate(this.x, this.y);
+        rectMode(CENTER);
         rotate(this.angle);
         fill("yellow");
         noStroke();
-        rect(0, -1, 14, 4.5);
+        rect(0, 0, 14, 4.5);
         pop();
     }
 }

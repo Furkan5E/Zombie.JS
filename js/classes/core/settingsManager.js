@@ -11,16 +11,17 @@ class SettingsManager {
 
     loadSettings(){
         const saved = localStorage.getItem("zombiejs_settings");
-        if (saved && saved !== 'undefined') {
+        if (saved && saved !== "undefined"){
             try {
                 return JSON.parse(saved);
-            } catch (error) {
+            }
+            catch (error){
                 console.warn("Error: ", error);
-                return { ...this.defaultSettings };
+                return {...this.defaultSettings};
             }
         }
         else{
-            return { ...this.defaultSettings };
+            return {...this.defaultSettings};
         }
     }
 

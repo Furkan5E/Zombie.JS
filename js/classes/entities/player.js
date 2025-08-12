@@ -45,15 +45,15 @@ class Player {
         push();
         translate(this.x, this.y);
         rotate(this.angle);
-        noSmooth();
         imageMode(CENTER);
-
+        
         let r = lerp(255, 255, this.hurtIntensity);
         let g = lerp(255, 0, this.hurtIntensity);
         let b = lerp(255, 0, this.hurtIntensity);
         tint(r, g, b);
-
-        image(playerImg, 0, 0, 95, 95);
+        
+        noSmooth();
+        image(playerImg, 0, 0, 155.7, 155.7);
         pop();
     }
 

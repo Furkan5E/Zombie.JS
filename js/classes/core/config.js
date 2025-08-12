@@ -30,22 +30,22 @@ let selectSound;
 let backgroundMusic;
 
 function preload() { // load assets
-  font = loadFont('assets/font.otf');
+  font = loadFont('assets/misc/font.otf');
 
-  heartImg = loadImage("assets/heart.png");
-  moneyImg = loadImage("assets/money.png");
-  playerImg = loadImage("assets/player.png");
-  zombieImg = loadImage("assets/zombie.png");
-  fastZombieImg = loadImage("assets/fastZombie.png");
-  strongZombieImg = loadImage("assets/strongZombie.png");
-  bossZombieImg = loadImage("assets/bossZombie.png");
-  minionZombieImg = loadImage("assets/minionZombie.png");
-  splitZombieImg = loadImage("assets/splitZombie.png");
+  heartImg = loadImage("assets/ui/heart.png");
+  moneyImg = loadImage("assets/ui/money.png");
+  playerImg = loadImage("assets/player/player.png");
+  zombieImg = loadImage("assets/zombies/zombie.png");
+  fastZombieImg = loadImage("assets/zombies/fastZombie.png");
+  strongZombieImg = loadImage("assets/zombies/strongZombie.png");
+  bossZombieImg = loadImage("assets/zombies/bossZombie.png");
+  minionZombieImg = loadImage("assets/zombies/minionZombie.png");
+  splitZombieImg = loadImage("assets/zombies/splitZombie.png");
 
-  playerHurtSound = loadSound("sounds/playerHurt.wav");
-  shootSound = loadSound("sounds/shoot.wav");
-  zombieHurtSound = loadSound("sounds/zombieHurt.wav");
-  splitSound = loadSound("sounds/split.wav");
-  selectSound = loadSound("sounds/select.wav");
-  backgroundMusic = loadSound("sounds/battleship.ogg")
+  playerHurtSound = loadSound("sounds/sfx/playerHurt.wav");
+  shootSound = loadSound("sounds/sfx/shoot.wav");
+  zombieHurtSound = loadSound("sounds/sfx/zombieHurt.wav");
+  splitSound = loadSound("sounds/sfx/split.wav");
+  selectSound = loadSound("sounds/sfx/select.wav");
+  backgroundMusic = loadSound("sounds/music/battleship.ogg")
 }
