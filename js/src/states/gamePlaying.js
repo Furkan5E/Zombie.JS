@@ -34,9 +34,17 @@ class GamePlaying {
             [1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3],
             [4,4,4,4,4,4,1,2,3,0,1,1,0]
         ];
+        
+        this.pause = new Pause(this);
     }
 
     update() {
+        //handle pause logic
+        this.pause.update();
+        if(this.pause.isPaused){
+            return;
+        }
+
         this.player.update();
 
         //spawn new zombies
@@ -132,12 +140,20 @@ class GamePlaying {
         image(moneyImg, 2, 35, 34, 34);
         text(": "+ this.player.money, 40, 48);
         text("Wave: " + (this.waveNumber + 1), 2, 79);
+
+        //pause overlay
+        if(this.pause.isPaused)
+            this.pause.draw();
     }
     
     mousePressed() {
-        let bullet = this.player.mousePressed();
-        if (bullet){
-            this.bulletsArray.push(bullet);
+        if(this.pause.isPaused)
+            this.pause.mousePressed();
+        else{
+            let bullet = this.player.mousePressed();
+            if (bullet){
+                this.bulletsArray.push(bullet);
+            }
         }
     }
     
@@ -155,6 +171,7 @@ class GamePlaying {
 
         this.waveNumber = 0;
         this.count = 0;
+        this.pause.isPaused = false;
     }
     
 

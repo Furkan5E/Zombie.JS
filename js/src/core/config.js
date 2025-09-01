@@ -5,6 +5,7 @@ const KEYS = {
   MOVE_LEFT: 65,  // A
   MOVE_RIGHT: 68, // D
 
+  SHOP: 73,       // I
   PAUSE: 80,      // P
   RESTART: 82,    // R
   MENU: 27        // Esc
