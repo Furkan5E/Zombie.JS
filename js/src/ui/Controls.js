@@ -31,4 +31,5 @@ class Controls {
     mousePressed(){
         this.backButton.mousePressed();
     }
+    
 }
