@@ -19,7 +19,8 @@ class Pause {
         push();
         noStroke()
         fill(0, 210);
-        rect(0, 0, width*2, height*2);
+        rectMode(CENTER);
+        rect(width/2, height/2, width, height);
 
         textAlign(CENTER, CENTER);
         textSize(64);
@@ -39,11 +40,12 @@ class Pause {
         if (keyIsDown(KEYS.PAUSE) && this.pauseCooldown === 0){
             this.pauseCooldown = 17;
             this.isPaused = !this.isPaused;
+            this.gamePlaying.shop.isShopOpen = false;
         }
 
-        if (keyIsDown(KEYS.RESTART))
+        if (keyIsDown(KEYS.RESTART) && this.isPaused)
             this.gamePlaying.startGame();
-        else if (keyIsDown(KEYS.MENU))
+        else if (keyIsDown(KEYS.MENU) && this.isPaused)
             this.gamePlaying.game.setState("MENU");
     }
 
