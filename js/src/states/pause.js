@@ -40,7 +40,6 @@ class Pause {
         if (keyIsDown(KEYS.PAUSE) && this.pauseCooldown === 0){
             this.pauseCooldown = 17;
             this.isPaused = !this.isPaused;
-            this.gamePlaying.shop.isShopOpen = false;
         }
 
         if (keyIsDown(KEYS.RESTART) && this.isPaused)

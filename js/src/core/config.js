@@ -48,5 +48,6 @@ function preload() { // load assets
   zombieHurtSound = loadSound("sounds/sfx/zombieHurt.wav");
   splitSound = loadSound("sounds/sfx/split.wav");
   selectSound = loadSound("sounds/sfx/select.wav");
-  backgroundMusic = loadSound("sounds/music/battleship.ogg")
+  gameTheme = loadSound("sounds/music/Constant Tension.wav");
+  menuTheme = loadSound("sounds/music/Drums and Braams.wav");
 }

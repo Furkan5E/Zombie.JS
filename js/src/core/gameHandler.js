@@ -22,12 +22,22 @@ class GameHandler {
         this.chosenState.draw();
     }
     
-    setState(newState) {
-        if (this.states[newState])
+    setState(newState){
+        if(this.states[newState]) {
             this.chosenState = this.states[newState];
-        else 
+            //handle music
+            if(newState === "PLAYING"){
+                this.audio.setMusic("GAME");
+            } 
+            else{
+            this.audio.setMusic("MENU");
+            }
+        }
+        else {
             console.error(newState + " state doesn't exist");
+        }
     }
+
 
     mousePressed() {
         this.chosenState.mousePressed();

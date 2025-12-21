@@ -1,19 +1,48 @@
 class AudioManager {
-    constructor(settingsManager) {
-        this.settingsManager = settingsManager;
+  constructor(settingsManager) {
+    this.settingsManager = settingsManager;
+
+    this.tracks = {
+      MENU: menuTheme,
+      GAME: gameTheme,
+    };
+
+    this.currentMusicKey = null;
+    this.currentMusic = null;
+  }
+
+  playSFX(sound) {
+    if (this.settingsManager.settings.sfxON) {
+      sound.play();
+    }
+  }
+
+  setMusic(key) {
+    if (this.currentMusicKey === key){ //already on this track
+      this.playMusic();
+      return;
     }
 
-    playSFX(sound) {
-        if (this.settingsManager.settings.sfxON) {
-            sound.play();
-        }
+    if (this.currentMusic){ // stop old track
+      this.currentMusic.stop()
     }
 
-    playMusic(music) {
-        if (this.settingsManager.settings.musicON) {
-            music.loop();
-        } else {
-            music.pause();
+    // set new track
+    this.currentMusicKey = key;
+    this.currentMusic = this.tracks[key];
+    this.playMusic();
+  }
+
+  playMusic() {
+    if (!this.currentMusic)
+        return;
+    if (this.settingsManager.settings.musicON) {
+        if(!this.currentMusic.isPlaying || !this.currentMusic.isPlaying()){
+            this.currentMusic.loop();
         }
     }
+    else{
+      this.currentMusic.pause();
+    }
+  }
 }
