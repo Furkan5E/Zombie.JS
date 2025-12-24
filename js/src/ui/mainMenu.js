@@ -22,7 +22,7 @@ class MainMenu {
     }
 
     draw() {
-        background("black");
+        background(COLOURS.MENU);
         this.titleZombie.animate();
         this.titleZombie.draw();
         this.titleJS.animate();

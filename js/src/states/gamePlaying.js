@@ -114,7 +114,7 @@ class GamePlaying {
 
     
     draw() {
-        background("#b8b4b4");
+        background(COLOURS.PLAYING);
         
         //draw bullets
         for (let bullet of this.bulletsArray) {

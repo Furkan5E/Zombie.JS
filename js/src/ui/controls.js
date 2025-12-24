@@ -17,7 +17,7 @@ class Controls {
     }
 
     draw() {
-        background("black");
+        background(COLOURS.MENU);
         this.backButton.draw();
 
         for (let i = 0; i < this.text.length; i++) {

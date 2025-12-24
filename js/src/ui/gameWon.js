@@ -20,7 +20,7 @@ class GameWon {
     }
 
     draw() {
-        background("black");
+        background(COLOURS.MENU);
 
         for (let i = 0; i < this.text.length; i++) {
             this.text[i].draw();

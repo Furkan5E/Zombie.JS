@@ -10,8 +10,10 @@ const KEYS = {
   MENU: 27        // Esc
 };
 
+//background colours
 const COLOURS = {
-  MENU: "#000000", 
+  MENU: "#000000",
+  PLAYING: "#b8b4b4"
 }
 
 //asset handling

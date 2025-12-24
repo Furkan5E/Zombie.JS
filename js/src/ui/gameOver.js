@@ -16,7 +16,7 @@ class GameOver {
     }
 
     draw() {
-        background("black");
+        background(COLOURS.MENU);
 
         this.title.draw();
         this.backButton.draw();
