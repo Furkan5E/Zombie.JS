@@ -14,3 +14,13 @@ function draw() {
 function mousePressed() {
   game.mousePressed();
 }
+
+function mouseDragged() {
+  if (game.chosenState.mouseDragged) 
+    game.chosenState.mouseDragged();
+}
+
+function mouseReleased() {
+  if (game.chosenState.mouseReleased) 
+    game.chosenState.mouseReleased();
+}

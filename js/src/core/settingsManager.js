@@ -1,8 +1,8 @@
 class SettingsManager {
     constructor(){
         this.defaultSettings = {
-            sfxON: true,
-            musicON: true
+            musicVolume: 0.7,
+            sfxVolume: 0.6
         }
 
         //load settings if available
@@ -31,13 +31,13 @@ class SettingsManager {
         }
     }
 
-    toggleMusic() {
-        this.settings.musicON = !this.settings.musicON;
+    setMusicVolume(vol) {
+        this.settings.musicVolume = constrain(vol, 0, 1);
         this.saveSettings();
     }
 
-    toggleSFX() {
-        this.settings.sfxON = !this.settings.sfxON;
+    setSfxVolume(vol) {
+        this.settings.sfxVolume = constrain(vol, 0,1);
         this.saveSettings();
     }
 }

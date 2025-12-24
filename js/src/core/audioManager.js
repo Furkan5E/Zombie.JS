@@ -12,9 +12,13 @@ class AudioManager {
   }
 
   playSFX(sound) {
-    if (this.settingsManager.settings.sfxON) {
-      sound.play();
-    }
+    const sfxVol = this.settingsManager.settings.sfxVolume ?? 1;
+    if (sfxVol <= 0)
+      return;
+
+    if (sound.setVolume)
+      sound.setVolume(sfxVol);
+    sound.play();
   }
 
   setMusic(key) {
@@ -35,14 +39,36 @@ class AudioManager {
 
   playMusic() {
     if (!this.currentMusic)
-        return;
-    if (this.settingsManager.settings.musicON) {
-        if(!this.currentMusic.isPlaying || !this.currentMusic.isPlaying()){
-            this.currentMusic.loop();
-        }
-    }
-    else{
+      return;
+
+    const vol = this.settingsManager.settings.musicVolume;
+
+    // volume 0 = mute
+    if (vol <= 0) {
       this.currentMusic.pause();
+      return;
+    }
+
+    this.currentMusic.setVolume(vol);
+
+    //loop if not already playing
+    if (!this.currentMusic.isPlaying || !this.currentMusic.isPlaying()) {
+      this.currentMusic.loop();
+    }
+  }
+
+  applyMusicVolume() {
+    if (!this.currentMusic)
+      return;
+    const vol = this.settingsManager.settings.musicVolume;
+    //mute
+    if (vol <= 0) {
+      this.currentMusic.pause();
+      return;
+    }
+    this.currentMusic.setVolume(vol);
+    if (!this.currentMusic.isPlaying || !this.currentMusic.isPlaying()) {
+      this.currentMusic.loop();
     }
   }
 }
